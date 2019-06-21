@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Checking if IPsec is installed
 echo "Checking if IPsec is installed"
 ipdir="/etc/ipsec.d"
@@ -23,6 +24,7 @@ DIR2="certs/intermediate"
 CERT3="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt"
 CERT4="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 
+# Downloading the CA certificates
 wget_output=$(wget -P "$DIR1" "$CERT1" "$CERT2")
 if [ $? -ne 0 ]; 
 then
@@ -31,6 +33,7 @@ else
 	echo "CA Certificates downloaded."
 fi
 
+# Downloading the Intermediate certificates
 wget_output=$(wget -P "$DIR2" "$CERT3" "$CERT4")
 if [ $? -ne 0 ]; 
 then
@@ -40,7 +43,7 @@ else
 fi
 
 
-# Importing the certificates
+# Importing the CA certificates
 echo "Importing the downloaded certificates into NSS Database"
 for file in certs/CA/*; do
   file=${file##*/}
@@ -49,7 +52,9 @@ for file in certs/CA/*; do
   certutil -A -d sql:/etc/ipsec.d -n "$name" -i certs/CA/"$file" -t "CT,,"
   #certutil -A -d sql:${HOME}/.pki/nssdb -n "$name" -i certs/CA/"$file" -t "CT,,"
 done
+echo "CA certificates Imported successfully."
 
+# Importing the Intermediate certificates
 for file in certs/intermediate/*; do
   file=${file##*/}
   # Removing the file extension (.pem.txt) from certificates
@@ -57,3 +62,4 @@ for file in certs/intermediate/*; do
   certutil -A -d sql:/etc/ipsec.d -n "$name" -i certs/intermediate/"$file" -t "u,u,u"
   #certutil -A -d sql:${HOME}/.pki/nssdb -n "$name" -i certs/intermediate/"$file" -t "u,u,u"
 done
+echo "Intermediate certificates Imported successfully."
