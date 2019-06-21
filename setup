@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Checking if IPsec is installed
+echo "Checking if IPsec is installed"
+ipdir="/etc/ipsec.d"
+if [ ! -d "$ipdir" ] 
+then
+	echo "Directory /etc/ipsec.d DOES NOT exists. Please install IPsec (https://libreswan.org)"
+else
+	echo "IPsec is installed."
+fi
+
+
+# Downloading the letsencrypt certificates
+echo "Downloading the letsencrypt certificates"
+DIR="certs"
+CERT1="https://letsencrypt.org/certs/isrgrootx1.pem.txt"
+CERT2="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt"
+CERT3="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
+CERT4="https://letsencrypt.org/certs/trustid-x3-root.pem.txt"
+cd $DIR
+#wget_output=$(wget -P "$DIR" "$CERT1" "$CERT2" "$CERT3" "$CERT4")
+if [ $? -ne 0 ]; 
+then
+	echo "Certificates NOT FOUND." 
+else
+	echo "Certificates downloaded."
+fi
+
+
+# Importing the certificates
+echo "Importing the downloaded certificates into NSS Database"
+for file in certs/*; do
+  file=${file##*/}
+  # Removing the file extension (.pem.txt) from certificates
+  name=${file%.pem.txt}
+  certutil -A -d sql:/etc/ipsec.d -n "$name" -i certs/"$file" -t "CT,,"
+  #below command for local testing - Rishabh
+  #certutil -A -d sql:${HOME}/.pki/nssdb -n "$name" -i certs/"$file" -t "CT,,"
+done
