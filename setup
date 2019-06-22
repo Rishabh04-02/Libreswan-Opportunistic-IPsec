@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# This script needs to be run as root
 
 # Checking if IPsec is installed
 echo "Checking if IPsec is installed"
@@ -50,7 +51,6 @@ for file in certs/CA/*; do
   # Removing the file extension (.pem.txt) from certificates
   name=${file%.pem.txt}
   certutil -A -d sql:/etc/ipsec.d -n "$name" -i certs/CA/"$file" -t "CT,,"
-  #certutil -A -d sql:${HOME}/.pki/nssdb -n "$name" -i certs/CA/"$file" -t "CT,,"
 done
 echo "CA certificates Imported successfully."
 
@@ -60,6 +60,5 @@ for file in certs/intermediate/*; do
   # Removing the file extension (.pem.txt) from certificates
   name=${file%.pem.txt}
   certutil -A -d sql:/etc/ipsec.d -n "$name" -i certs/intermediate/"$file" -t "u,u,u"
-  #certutil -A -d sql:${HOME}/.pki/nssdb -n "$name" -i certs/intermediate/"$file" -t "u,u,u"
 done
 echo "Intermediate certificates Imported successfully."
