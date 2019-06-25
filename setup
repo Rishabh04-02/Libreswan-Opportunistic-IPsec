@@ -79,3 +79,8 @@ fi
 cp "$configFile" "$ipdir"
 
 echo "$configFile configuration saved in $ipdir"
+
+
+#Restarting Ipsec
+echo "Restarting Ipsec"
+ipsec restart
