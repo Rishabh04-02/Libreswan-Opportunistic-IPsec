@@ -2,6 +2,10 @@
 
 # This script needs to be run as root
 
+#Installing for client or server?
+read -p "Installing for server or client? Type (S/C) " answer
+#confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
+
 # Checking if IPsec is installed
 echo "Checking if IPsec is installed"
 ipdir="/etc/ipsec.d"
@@ -62,3 +66,16 @@ for file in certs/intermediate/*; do
   certutil -A -d sql:/etc/ipsec.d -n "$name" -i certs/intermediate/"$file" -t "u,u,u"
 done
 echo "Intermediate certificates Imported successfully."
+
+
+#Copying the required configuration
+if [ "$answer" = "s" ] || [ "$answer" = "S" ];
+then
+  configFile="config/oe-letsencrypt-server.conf"
+else
+  configFile="config/oe-letsencrypt-client.conf"
+fi
+
+cp "$configFile" "$ipdir"
+
+echo "$configFile configuration saved in $ipdir"
