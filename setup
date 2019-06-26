@@ -1,6 +1,12 @@
 #!/bin/bash
 
 # This script needs to be run as root
+echo "Checking if the script is run as root."
+if [[ $EUID -ne 0 ]]; 
+then
+  echo -e "This script should be run as root. \n"
+  exit 
+fi
 
 #Installing for client or server?
 read -p "Installing for server or client? Type (S/C) " answer
@@ -62,8 +68,8 @@ else
 fi
 
 
-# Initialising the nss database
-echo "Initialising the nss database"
+# Initializing the nss database
+echo "Initializing the nss database"
 ipsec initnss
 echo
 
