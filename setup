@@ -6,6 +6,8 @@ if [[ $EUID -ne 0 ]];
 then
   echo -e "This script should be run as root. \n"
   exit 
+else
+  echo -e "This script is run as root. Good to go. \n"
 fi
 
 #Installing for client or server?
