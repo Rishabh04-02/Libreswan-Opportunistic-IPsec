@@ -4,7 +4,7 @@
 
 #Installing for client or server?
 read -p "Installing for server or client? Type (S/C) " answer
-#confirm && [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]] || exit 1
+
 
 # Checking if IPsec is installed
 echo "Checking if IPsec is installed"
@@ -12,8 +12,12 @@ ipdir="/etc/ipsec.d"
 if [ ! -d "$ipdir" ] 
 then
 	echo "Directory /etc/ipsec.d DOES NOT exists. Please install IPsec (https://libreswan.org)"
+  echo "For Fedora - dnf -y install libreswan-3.*"
+  echo "For Centos - yum -y install libreswan-3.*"
+  echo "For Ubuntu - apt-get -y install libreswan"
+  exit
 else
-	echo "IPsec is installed."
+	echo -e "IPsec is installed. \n"
 fi
 
 
@@ -29,24 +33,39 @@ DIR2="certs/intermediate"
 CERT3="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt"
 CERT4="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 
+# Deleting the certs directory (if previously present)
+echo "Deleting the certs directories $DIR1 , $DIR2 (if previously present)"
+
+rm -rf "$DIR1"
+rm -rf "$DIR2"
+
 # Downloading the CA certificates
-wget_output=$(wget -P "$DIR1" "$CERT1" "$CERT2")
+wget_output=$(wget -q -P "$DIR1" "$CERT1" "$CERT2")
 if [ $? -ne 0 ]; 
 then
-	echo "Certificates NOT FOUND." 
+	echo "Certificates NOT Found OR Saving the certificates in directory failed"
+  echo "try running the script with 'sudo' (root privileges)"
+  exit 
 else
 	echo "CA Certificates downloaded."
 fi
 
 # Downloading the Intermediate certificates
-wget_output=$(wget -P "$DIR2" "$CERT3" "$CERT4")
+wget_output=$(wget -q -P "$DIR2" "$CERT3" "$CERT4")
 if [ $? -ne 0 ]; 
 then
-	echo "Certificates NOT FOUND." 
+	echo "Certificates NOT Found OR Saving the certificates in directory failed"
+  echo "try running the script with 'sudo' (root privileges)"
+  exit 
 else
-	echo "Intermediate Certificates downloaded."
+	echo -e "Intermediate Certificates downloaded. \n"
 fi
 
+
+# Initialising the nss database
+echo "Initialising the nss database"
+ipsec initnss
+echo
 
 # Importing the CA certificates
 echo "Importing the downloaded certificates into NSS Database"
@@ -65,7 +84,7 @@ for file in certs/intermediate/*; do
   name=${file%.pem.txt}
   certutil -A -d sql:/etc/ipsec.d -n "$name" -i certs/intermediate/"$file" -t "u,u,u"
 done
-echo "Intermediate certificates Imported successfully."
+echo -e "Intermediate certificates Imported successfully. \n"
 
 
 #Copying the required configuration
@@ -78,7 +97,8 @@ fi
 
 cp "$configFile" "$ipdir"
 
-echo "$configFile configuration saved in $ipdir"
+echo "Saving the required configuration"
+echo -e "$configFile configuration saved in $ipdir \n"
 
 
 #Restarting Ipsec
