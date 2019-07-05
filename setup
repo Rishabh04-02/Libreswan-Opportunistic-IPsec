@@ -137,6 +137,6 @@ then
 else
   echo -e "OE Connection established successfully \n"
   #Displaying connection status
-  echo "Displaying connection status"
+  echo -e "Displaying connection status \n"
   ipsec traffic
 fi
