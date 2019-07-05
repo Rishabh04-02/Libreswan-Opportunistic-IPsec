@@ -9,7 +9,7 @@ else
     echo -e "This script is run as root. Good to go. \n"
 fi
 
-#Installing for client or server?
+# Installing for client or server?
 read -p "Installing for server or client? Type (sS/cC) " answer
 
 # Checking if IPsec is installed
@@ -25,14 +25,14 @@ else
     echo -e "IPsec is installed. \n"
 fi
 
-#Checking for any existing OE connections
+# Checking for any existing OE connections
 echo -e "Checking for any existing OE connections"
 oeExisting=$(ipsec traffic)
 if [ -z "$oeExisting" ]; then
     echo "No existing OE connections found. Good to go."
 else
     echo "Existing OE Connections Found. Stopping the connections."
-    #Stopping the existing OE connections
+    # Stopping the existing OE connections
     ipsec restart
 fi
 
@@ -98,7 +98,7 @@ for file in certs/intermediate/*; do
 done
 echo -e "Intermediate certificates Imported successfully. \n"
 
-#Copying the required configuration
+# Copying the required configuration
 if [ "$answer" = "s" ] || [ "$answer" = "S" ]; then
     configFile="config/oe-letsencrypt-server.conf"
 else
@@ -110,22 +110,21 @@ cp "$configFile" "$ipdir"
 echo "Saving the required configuration"
 echo -e "$configFile configuration saved in $ipdir \n"
 
-#Restarting Ipsec
+# Restarting Ipsec
 echo -e "Restarting Ipsec \n"
 ipsec restart
 
-#Establishing an OE connection
+# Establishing an OE connection
 echo -e "Establishing an OE connection. \n"
 if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
-    #Get the IP of server
+    # Get the IP of client
     getIP=$(curl ifconfig.me)
-
-    #Establish an OE connection in quiet mode
-    ##Take server IP as user input (once the initial testing completes)
+    # Establish an OE connection in quiet mode
+    ## Take server IP as user input (once the initial testing completes)
     ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 >/dev/null
 fi
 
-#Checking the success of establishing OE connection
+# Checking the success of establishing OE connection
 echo -e "\nChecking the success of establishing OE connection \n"
 oeSuccess=$(ipsec traffic)
 if [ -z "$oeSuccess" ]; then
@@ -133,7 +132,7 @@ if [ -z "$oeSuccess" ]; then
     exit
 else
     echo -e "OE Connection established successfully \n"
-    #Displaying connection status
+    # Displaying connection status
     echo -e "Displaying connection status \n"
     ipsec traffic
 fi

@@ -14,6 +14,15 @@ It can be installed using any of the following methods:
 
 Note - * refers to the latest version available.
 
+### curl
+It can be downloaded from [here](https://curl.haxx.se/download.html).
+
+### certutil
+It can be downloaded from [here](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/linux_cert_management.md).
+
+### wget
+It can be downloaded from [here - debian/ubuntu](https://www.cyberciti.biz/faq/how-to-install-wget-togetrid-of-error-bash-wget-command-not-found/) OR [here - RHEL/CentOS 7](https://www.cyberciti.biz/faq/yum-install-wget-redhat-cetos-rhel-7/)
+
 ## Installation
 
 1. clone the [project repository](https://github.com/Rishabh04-02/Libreswan-Opportunistic-IPsec.git) using the following command:
@@ -32,32 +41,32 @@ Note - * refers to the latest version available.
 
         $ sudo bash setup
         [sudo] password for user:
-            
+
         Checking if the script is run as root.
-        This script is run as root. Good to go. 
-        
+        This script is run as root. Good to go.
+
         Installing for server or client? Type (S/C) c
         Checking if IPsec is installed
-        IPsec is installed. 
-        
+        IPsec is installed.
+
         Downloading the letsencrypt certificates
         Deleting the certs directories certs/CA , certs/intermediate (if previously present)
         CA Certificates downloaded.
-        Intermediate Certificates downloaded. 
-        
+        Intermediate Certificates downloaded.
+
         Initializing the nss database
         NSS database already initialised - aborted
         To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
-        
+
         Importing the downloaded certificates into NSS Database
         CA certificates Imported successfully.
         Notice: Trust flag u is set automatically if the private key is present.
         Notice: Trust flag u is set automatically if the private key is present.
-        Intermediate certificates Imported successfully. 
-        
+        Intermediate certificates Imported successfully.
+
         Saving the required configuration
-        config/oe-letsencrypt-client.conf configuration saved in /etc/ipsec.d 
-        
+        config/oe-letsencrypt-client.conf configuration saved in /etc/ipsec.d
+
         Restarting Ipsec
         Redirecting to: systemctl restart ipsec.service
 
@@ -67,47 +76,47 @@ Note - * refers to the latest version available.
         [sudo] password for user:
 
         Checking if the script is run as root.
-        This script is run as root. Good to go. 
-        
+        This script is run as root. Good to go.
+
         Installing for server or client? Type (S/C) s
         Checking if IPsec is installed
-        IPsec is installed. 
-        
+        IPsec is installed.
+
         Downloading the letsencrypt certificates
         Deleting the certs directories certs/CA , certs/intermediate (if previously present)
         CA Certificates downloaded.
-        Intermediate Certificates downloaded. 
-        
+        Intermediate Certificates downloaded.
+
         Initializing the nss database
         NSS database already initialised - aborted
         To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
-        
+
         Importing the downloaded certificates into NSS Database
         CA certificates Imported successfully.
         Notice: Trust flag u is set automatically if the private key is present.
         Notice: Trust flag u is set automatically if the private key is present.
-        Intermediate certificates Imported successfully. 
-        
+        Intermediate certificates Imported successfully.
+
         Saving the required configuration
-        config/oe-letsencrypt-server.conf configuration saved in /etc/ipsec.d 
-        
+        config/oe-letsencrypt-server.conf configuration saved in /etc/ipsec.d
+
         Restarting Ipsec
         Redirecting to: systemctl restart ipsec.service
 
 
 ## Features Implemented so far
 
-1. The script can only be run as root. 
+1. The script can only be run as root.
 
 > The script checks if it is run as root or not. It is essential as to make changes in /etc/ipsec.d the script need root privileges.
 
-2. The script checks if IPsec is installed. 
+2. The script checks if IPsec is installed.
 
 > If not installed, the script exits after showing prompt with various available ways to install IPsec.
 
-3. Script downloads the letsencrypt certificates CA and intermediate certificates. 
+3. Script downloads the letsencrypt certificates CA and intermediate certificates.
 
-> If the script fails to download the certificates then it exits. Showing the error status. The possible reason for its failure was not running the script as `root` but that is fixed now. 
+> If the script fails to download the certificates then it exits. Showing the error status. The possible reason for its failure was not running the script as `root` but that is fixed now.
 
 
 4. Script saves the downloaded certificates in `certs` directory.
