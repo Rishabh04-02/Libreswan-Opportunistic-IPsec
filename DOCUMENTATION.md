@@ -1,6 +1,4 @@
-
 # Libreswan Opportunistic IPsec Documentation
-
 
 ## Prerequisite
 ### IPsec -  [Libreswan](https://github.com/libreswan/libreswan/)
@@ -35,7 +33,39 @@ It can be downloaded from [here - debian/ubuntu](https://www.cyberciti.biz/faq/h
  `sudo bash setup`
  When you run the setup file it'll ask for: *Installing for server or client? Type (S/C)*. Choose your response accordingly.
 
-## Sample Installation output
+## Scripts available
+Note - OE refers to Opportunistic Encryption.
+
+1. `setup`
+
+This script is the main script which is to be run when installing the project for the first time. This script performs the following tasks:
+* Check if IPsec is installed.
+* performs the 1st time server/client Installation.
+* Checks for existing OE connections.
+* Downloads the LetsEncrypt CA and intermediate certificates.
+* Initializes the NSS database and import the LetsEncrypt certificates in it.
+* Saves the default client/server configuration.
+* Restarts IPsec to load the latest changes.
+* Establishes the OE connection.
+* Checks for the success in establishing the OE connection.
+* Displays OE connection status to user.
+
+2. `import_certificates`
+* This scripts imports the custom certificates into the NSS database.
+* Save the certificates PKCS#12 (.p12) file in the `certs/custom` directory. The script will import all the certificates available in the directory.
+
+3. `custom_configuration`
+* This script allows user to create custom configurations and run IPsec with them.
+* The script loads the configuration from `config/custom` directory and saves it as the default configuration.
+* After saving the configuration the script restarts IPsec and establishes an OE connection.
+* It also displays the connection status to user.
+
+4. `create_connection`
+* This script checks for existing OE connections. Restarts IPsec if any existing OE connection found.
+* After that it establishes a new OE connection.
+* Displays the connection status to user.
+
+## Sample Installation output `setup`
 
 ### For Client
 
@@ -132,35 +162,3 @@ It can be downloaded from [here - debian/ubuntu](https://www.cyberciti.biz/faq/h
 	Checking the success of establishing OE connection
 
 	Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.)
-
-
-## Features Implemented so far [NEEDS UPDATION]
-
-1. The script can only be run as root.
-
-> The script checks if it is run as root or not. It is essential as to make changes in /etc/ipsec.d the script need root privileges.
-
-2. The script checks if IPsec is installed.
-
-> If not installed, the script exits after showing prompt with various available ways to install IPsec.
-
-3. Script downloads the letsencrypt certificates CA and intermediate certificates.
-
-> If the script fails to download the certificates then it exits. Showing the error status. The possible reason for its failure was not running the script as `root` but that is fixed now.
-
-
-4. Script saves the downloaded certificates in `certs` directory.
-
-> If the script is run once then the certificates are downloaded in the `certs` directory. But if one tries to redo the whole process(i.e. in case the certs are expired.), the old certs are deleted and new ones are downloaded.
-
-5. Script on repeated running (i.e. in case the certs are expired.) replaces the old configuration and certs and with the new updated certs and default configuration.
-
-6. The Script initializes the nssdb if not initialized before.
-
-7. The downloaded CA and intermediate certs are imported in the nssdb.
-
-8. The script adds the server/client configuration to /etc/ipsec.d based on the user preference.
-
-> The user is asked, if he is Installing for server or client?
-
-9. After performing all the above steps, script restarts the ipsec service.
