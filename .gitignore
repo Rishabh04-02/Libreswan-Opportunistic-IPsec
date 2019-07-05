@@ -1,3 +1,5 @@
 EXPERIMENTS/
-certs/
+certs/CA/*
+certs/intermediate/*
+certs/custom/*
 logs/
