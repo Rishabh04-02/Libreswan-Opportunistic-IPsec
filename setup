@@ -10,7 +10,7 @@ else
 fi
 
 # Installing for client or server?
-read -p "Installing for server or client? Type (sS/cC) " answer
+read -p "Installing for server or client? Type (sS/cC): " answer
 
 # Checking if IPsec is installed
 echo "Checking if IPsec is installed"
