@@ -130,10 +130,10 @@ fi
 #Checking the success of establishing OE connection
 echo -e "\nChecking the success of establishing OE connection \n"
 oeSuccess=$(ipsec traffic)
-if [ $? -ne 0 ]; 
+if [ -z "$oeSuccess" ]; 
 then
-  echo -e "OE Connection established successfully \n"
-else
   echo -e "Failed to establish an OE connection. \n"
   exit
+else
+  echo -e "OE Connection established successfully \n"
 fi
