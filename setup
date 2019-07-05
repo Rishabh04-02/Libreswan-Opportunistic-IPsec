@@ -112,3 +112,15 @@ echo -e "$configFile configuration saved in $ipdir \n"
 #Restarting Ipsec
 echo "Restarting Ipsec"
 ipsec restart
+
+#Establishing an OE connection
+echo "Establishing an OE connection"
+if [ "$answer" = "c" ] || [ "$answer" = "C" ];
+then
+  #Get the IP of server
+  getIP=$(curl ifconfig.me)
+  
+  #Establish an OE connection
+  ##Take server IP as user input (once the initial testing completes)
+  ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131
+fi
