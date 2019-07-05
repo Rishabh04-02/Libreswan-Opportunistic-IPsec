@@ -128,7 +128,7 @@ fi
 echo -e "\nChecking the success of establishing OE connection \n"
 oeSuccess=$(ipsec traffic)
 if [ -z "$oeSuccess" ]; then
-    echo -e "Failed to establish an OE connection. \n"
+    echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.) \n"
     exit
 else
     echo -e "OE Connection established successfully \n"

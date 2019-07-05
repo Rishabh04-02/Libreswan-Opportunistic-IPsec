@@ -39,88 +39,99 @@ It can be downloaded from [here - debian/ubuntu](https://www.cyberciti.biz/faq/h
 
 ### For Client
 
-		$ sudo bash setup
-		[sudo] password for user:
+	$ sudo bash setup
+	[sudo] password for user:
 
-		Checking if the script is run as root.
-		This script is run as root. Good to go.
+	Checking if the script is run as root.
+	This script is run as root. Good to go.
 
-		Installing for server or client? Type (sS/cC) c
-		Checking if IPsec is installed
-		IPsec is installed.
+	Installing for server or client? Type (sS/cC) c
+	Checking if IPsec is installed
+	IPsec is installed.
 
-		Checking for any existing OE connections
-		Existing OE Connections Found. Stopping the connections.
-		Redirecting to: systemctl restart ipsec.service
+	Checking for any existing OE connections
+	Existing OE Connections Found. Stopping the connections.
+	Redirecting to: systemctl restart ipsec.service
 
-		Downloading the letsencrypt certificates
-		Deleting the certs directories certs/CA , certs/intermediate (if previously present)
-		CA Certificates downloaded.
-		Intermediate Certificates downloaded.
+	Downloading the letsencrypt certificates
+	Deleting the certs directories certs/CA , certs/intermediate (if previously present)
+	CA Certificates downloaded.
+	Intermediate Certificates downloaded.
 
-		Initializing the nss database
-		NSS database already initialised - aborted
-		To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
+	Initializing the nss database
+	NSS database already initialised - aborted
+	To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
 
-		Importing the downloaded certificates into NSS Database
-		CA certificates Imported successfully.
-		Notice: Trust flag u is set automatically if the private key is present.
-		Notice: Trust flag u is set automatically if the private key is present.
-		Intermediate certificates Imported successfully.
+	Importing the downloaded certificates into NSS Database
+	CA certificates Imported successfully.
+	Notice: Trust flag u is set automatically if the private key is present.
+	Notice: Trust flag u is set automatically if the private key is present.
+	Intermediate certificates Imported successfully.
 
-		Saving the required configuration
-		config/oe-letsencrypt-client.conf configuration saved in /etc/ipsec.d
+	Saving the required configuration
+	config/oe-letsencrypt-client.conf configuration saved in /etc/ipsec.d
 
-		Restarting Ipsec
+	Restarting Ipsec
 
-		Redirecting to: systemctl restart ipsec.service
-		Establishing an OE connection.
+	Redirecting to: systemctl restart ipsec.service
+	Establishing an OE connection.
 
-		  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-		                                 Dload  Upload   Total   Spent    Left  Speed
-		100    14  100    14    0     0     51      0 --:--:-- --:--:-- --:--:--    51
+	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+	                                 Dload  Upload   Total   Spent    Left  Speed
+	100    14  100    14    0     0     51      0 --:--:-- --:--:-- --:--:--    51
 
-		Checking the success of establishing OE connection
+	Checking the success of establishing OE connection
 
-		OE Connection established successfully
+	OE Connection established successfully
 
-		Displaying connection status
+	Displaying connection status
 
-		006 #2: "private-or-clear#193.110.157.131/32"[1] ...193.110.157.131, type=ESP, add_time=1562298201, inBytes=0, outBytes=0, id='CN=letsencrypt.libreswan.org'
+	006 #2: "private-or-clear#193.110.157.131/32"[1] ...193.110.157.131, type=ESP, add_time=1562298201, inBytes=0, outBytes=0, id='CN=letsencrypt.libreswan.org'
 
 
 ### For Server
 
-        $ sudo bash setup
-        [sudo] password for user:
+	$ sudo bash setup
+	[sudo] password for user:
 
-        Checking if the script is run as root.
-        This script is run as root. Good to go.
+	Checking if the script is run as root.
+	This script is run as root. Good to go.
 
-        Installing for server or client? Type (S/C) s
-        Checking if IPsec is installed
-        IPsec is installed.
+	Installing for server or client? Type (sS/cC) s
+	Checking if IPsec is installed
+	IPsec is installed.
 
-        Downloading the letsencrypt certificates
-        Deleting the certs directories certs/CA , certs/intermediate (if previously present)
-        CA Certificates downloaded.
-        Intermediate Certificates downloaded.
+	Checking for any existing OE connections
+	Existing OE Connections Found. Stopping the connections.
+	Redirecting to: systemctl restart ipsec.service
 
-        Initializing the nss database
-        NSS database already initialised - aborted
-        To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
+	Downloading the letsencrypt certificates
+	Deleting the certs directories certs/CA , certs/intermediate (if previously present)
+	CA Certificates downloaded.
+	Intermediate Certificates downloaded.
 
-        Importing the downloaded certificates into NSS Database
-        CA certificates Imported successfully.
-        Notice: Trust flag u is set automatically if the private key is present.
-        Notice: Trust flag u is set automatically if the private key is present.
-        Intermediate certificates Imported successfully.
+	Initializing the nss database
+	NSS database already initialised - aborted
+	To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
 
-        Saving the required configuration
-        config/oe-letsencrypt-server.conf configuration saved in /etc/ipsec.d
+	Importing the downloaded certificates into NSS Database
+	CA certificates Imported successfully.
+	Notice: Trust flag u is set automatically if the private key is present.
+	Notice: Trust flag u is set automatically if the private key is present.
+	Intermediate certificates Imported successfully.
 
-        Restarting Ipsec
-        Redirecting to: systemctl restart ipsec.service
+	Saving the required configuration
+	config/oe-letsencrypt-server.conf configuration saved in /etc/ipsec.d
+
+	Restarting Ipsec
+
+	Redirecting to: systemctl restart ipsec.service
+	Establishing an OE connection.
+
+
+	Checking the success of establishing OE connection
+
+	Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.)
 
 
 ## Features Implemented so far [NEEDS UPDATION]
