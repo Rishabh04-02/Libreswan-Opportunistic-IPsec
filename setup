@@ -110,11 +110,12 @@ echo -e "$configFile configuration saved in $ipdir \n"
 
 
 #Restarting Ipsec
-echo "Restarting Ipsec"
+echo -e "Restarting Ipsec \n"
 ipsec restart
 
+
 #Establishing an OE connection
-echo "Establishing an OE connection"
+echo -e "Establishing an OE connection. \n"
 if [ "$answer" = "c" ] || [ "$answer" = "C" ];
 then
   #Get the IP of server
@@ -123,4 +124,16 @@ then
   #Establish an OE connection
   ##Take server IP as user input (once the initial testing completes)
   ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131
+fi
+
+
+#Checking the success of establishing OE connection
+echo -e "\nChecking the success of establishing OE connection \n"
+oeSuccess=$(ipsec traffic)
+if [ $? -ne 0 ]; 
+then
+  echo -e "OE Connection established successfully \n"
+else
+  echo -e "Failed to establish an OE connection. \n"
+  exit
 fi
