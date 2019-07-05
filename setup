@@ -11,7 +11,7 @@ else
 fi
 
 #Installing for client or server?
-read -p "Installing for server or client? Type (S/C) " answer
+read -p "Installing for server or client? Type (sS/cC) " answer
 
 
 # Checking if IPsec is installed
@@ -29,8 +29,21 @@ else
 fi
 
 
+#Checking for any existing OE connections
+echo -e "Checking for any existing OE connections"
+oeExisting=$(ipsec traffic)
+if [ -z "$oeExisting" ]; 
+then
+  echo "No existing OE connections found. Good to go."
+else
+  echo "Existing OE Connections Found. Stopping the connections."
+  #Stopping the existing OE connections
+  ipsec restart
+fi
+
+
 # Downloading the letsencrypt certificates
-echo "Downloading the letsencrypt certificates"
+echo -e "\nDownloading the letsencrypt certificates"
 DIR1="certs/CA"
 # CA certificates
 CERT1="https://letsencrypt.org/certs/isrgrootx1.pem.txt"
@@ -121,7 +134,7 @@ then
   #Get the IP of server
   getIP=$(curl ifconfig.me)
   
-  #Establish an OE connection
+  #Establish an OE connection in quiet mode
   ##Take server IP as user input (once the initial testing completes)
   ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 > /dev/null
 fi
