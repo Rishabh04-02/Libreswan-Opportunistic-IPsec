@@ -36,3 +36,30 @@ if [ "$confCopied" = "y" ] || [ "$confCopied" = "Y" ]; then
 else
     echo -e "\nNo custom config file found. \n"
 fi
+
+# Restarting Ipsec
+echo -e "Restarting Ipsec \n"
+ipsec restart
+
+# Establishing an OE connection
+echo -e "Establishing an OE connection. \n"
+if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
+    # Get the IP of client
+    getIP=$(curl ifconfig.me)
+    # Establish an OE connection in quiet mode
+    ## Take server IP as user input (once the initial testing completes)
+    ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 >/dev/null
+fi
+
+# Checking the success of establishing OE connection
+echo -e "\nChecking the success of establishing OE connection \n"
+oeSuccess=$(ipsec traffic)
+if [ -z "$oeSuccess" ]; then
+    echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic. OR Check if there is only one '.conf' file in the $ipdir) \n"
+    exit
+else
+    echo -e "OE Connection established successfully \n"
+    # Displaying connection status
+    echo -e "Displaying connection status \n"
+    ipsec traffic
+fi
