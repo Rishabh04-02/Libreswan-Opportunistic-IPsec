@@ -123,7 +123,7 @@ then
   
   #Establish an OE connection
   ##Take server IP as user input (once the initial testing completes)
-  ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131
+  ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 > /dev/null
 fi
 
 
