@@ -9,9 +9,6 @@ else
     echo -e "This script is run as root. Good to go. \n"
 fi
 
-# Installing for client or server?
-read -p "Installing for server or client? Type (sS/cC): " answer
-
 # Checking if IPsec is installed
 echo "Checking if IPsec is installed"
 ipdir="/etc/ipsec.d"
@@ -29,7 +26,7 @@ fi
 echo -e "Checking for any existing OE connections"
 oeExisting=$(ipsec traffic)
 if [ -z "$oeExisting" ]; then
-    echo "No existing OE connections found. Good to go."
+    echo -e "No existing OE connections found. Good to go.\n"
 else
     echo "Existing OE Connections Found. Stopping the connections."
     # Stopping the existing OE connections
@@ -37,7 +34,7 @@ else
 fi
 
 # Establishing an OE connection
-echo -e "Establishing an OE connection. \n"
+echo -e "\nEstablishing an OE connection. \n"
 if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
     # Get the IP of client
     getIP=$(curl ifconfig.me)
@@ -45,6 +42,10 @@ if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
     ## Take server IP as user input (once the initial testing completes)
     ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 >/dev/null
 fi
+
+# Sending pings to the letsencrypt server
+echo -e "Sending ping(IPv4) to the letsencrypt server. \n"
+ping -4 -c 5 letsencrypt.libreswan.org
 
 # Checking the success of establishing OE connection
 echo -e "\nChecking the success of establishing OE connection \n"
