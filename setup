@@ -74,10 +74,16 @@ else
     echo -e "Intermediate Certificates downloaded. \n"
 fi
 
-# Initializing the nss database
-echo "Initializing the nss database"
-ipsec initnss
-echo
+# Checking if nss database exists
+echo "Checking if nss database exists"
+dbFileCount=$(ls "$ipdir"/*.db 2>/dev/null | wc -l)
+if [ $dbFileCount != 0 ]; then
+    echo -e "nss database exists. \n"
+else
+    # Initializing the nss database
+    echo "nss database does not exist. Initializing the nss database"
+    ipsec initnss
+fi
 
 # Importing the CA certificates
 echo "Importing the downloaded certificates into NSS Database"
