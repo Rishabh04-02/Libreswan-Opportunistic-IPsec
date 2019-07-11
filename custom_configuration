@@ -23,13 +23,15 @@ else
 fi
 
 # Copy the custom configuration in config/custom/ directory
-read -p "Copy the custom certificates PKCS#12(.p12) in 'certs/custom/' directory and Type (yY): " confCopied
+read -p "Copy the custom configuration file in 'config/custom/' directory and Type (yY): " confCopied
 
 if [ "$confCopied" = "y" ] || [ "$confCopied" = "Y" ]; then
     for file in config/custom/*; do
         file=${file##*/}
         configFile=config/custom/"$file"
         cp "$configFile" "$ipdir"
+        echo "restoring the security context of $ipdir/$file using restorecon."
+        restorecon "$ipdir"/"$file"
         echo -e "\nNote - Make sure there is only one '.conf' file in the $ipdir , Listing contents of $ipdir\n"
         ls "$ipdir"
     done
