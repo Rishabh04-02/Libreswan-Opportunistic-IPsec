@@ -21,6 +21,9 @@ It can be downloaded from [here](https://chromium.googlesource.com/chromium/src/
 ### wget
 It can be downloaded from [here - debian/ubuntu](https://www.cyberciti.biz/faq/how-to-install-wget-togetrid-of-error-bash-wget-command-not-found/) OR [here - RHEL/CentOS 7](https://www.cyberciti.biz/faq/yum-install-wget-redhat-cetos-rhel-7/)
 
+### certbot
+It is required to generate certificates (only if you are using the script for the server side). It can be downloaded from [here](https://certbot.eff.org/)
+
 ## Installation
 
 1. clone the [project repository](https://github.com/Rishabh04-02/Libreswan-Opportunistic-IPsec.git) using the following command:
