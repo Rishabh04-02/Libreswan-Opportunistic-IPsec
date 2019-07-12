@@ -19,4 +19,4 @@ else
 fi
 
 echo -e "Updating the certificate using Certbot keeping the private key same. \n"
-sudo certbot certonly --webroot
+certbot renew --reuse-key
