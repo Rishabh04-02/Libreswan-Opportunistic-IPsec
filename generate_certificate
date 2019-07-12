@@ -55,7 +55,7 @@ done
 # Now generating the #pkcs12 (.p12) file
 read -p "Enter the cert directory location (e.g. /etc/letsencrypt/live/letsencrypt.libreswan.org): " LetsEncryptCertDir
 
-openssl pkcs12 -export -inkey "$LetsEncryptCertDir"/privkey.pem -in "$LetsEncryptCertDir"/fullchain.pem -CAfile "$DIR"/"$name" -out "$DIR"/generatedCertificate.p12
+openssl pkcs12 -export -inkey "$LetsEncryptCertDir"/privkey.pem -in "$LetsEncryptCertDir"/fullchain.pem -CAfile "$DIR"/"$name" -out "$LetsEncryptCertDir"/generatedCertificate.p12
 
 # Importing the certificate in nss database
 echo -e "\nImporting the certificate in nss database."
