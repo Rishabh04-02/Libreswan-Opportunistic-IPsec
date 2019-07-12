@@ -52,7 +52,6 @@ CERT4="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 wget_output=$(wget -q -P "$DIR1" "$CERT1" "$CERT2")
 if [ $? -ne 0 ]; then
     echo "Certificates NOT Found OR Saving the certificates in directory failed"
-    echo "try running the script with 'sudo' (root privileges)"
     exit
 else
     echo "CA Certificates downloaded in $DIR1"
@@ -62,7 +61,6 @@ fi
 wget_output=$(wget -q -P "$DIR2" "$CERT3" "$CERT4")
 if [ $? -ne 0 ]; then
     echo "Certificates NOT Found OR Saving the certificates in directory failed"
-    echo "try running the script with 'sudo' (root privileges)"
     exit
 else
     echo -e "Intermediate Certificates downloaded in $DIR2 \n"

@@ -35,8 +35,7 @@ CERT="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 
 wget_output=$(wget -q -P "$DIR" "$CERT")
 if [ $? -ne 0 ]; then
-    echo "Certificates NOT Found OR Saving the certificates in directory failed"
-    echo "try running the script with 'sudo' (root privileges)"
+    echo "Certificates NOT Found OR Saving the certificate in directory failed"
     exit
 else
     echo -e "Intermediate Certificate downloaded in $DIR \n"
