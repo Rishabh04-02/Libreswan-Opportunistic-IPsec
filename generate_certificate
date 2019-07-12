@@ -65,6 +65,5 @@ pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir"/generatedCertificate.p12
 echo -e "Displaying the certificates installed in nss database. \n"
 certutil -L -d sql:/etc/ipsec.d
 
-# Running the test connection
-echo -e "Running the test connection script. \n"
-source test_connection
+# To confirm the success try running the test connection script on the client
+echo -e "\nTo confirm the success try running the test connection script on the client"
