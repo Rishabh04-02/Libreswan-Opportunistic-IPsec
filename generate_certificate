@@ -14,9 +14,57 @@ echo -e "Checking if Certbot is installed. \n"
 certBotInstalled=$(command -v certbot)
 if [ -z "$certBotInstalled" ]; then
     echo -e "Certbot not installed. \n"
+    exit
 else
     echo -e "Certbot is installed, Good to go. \n"
 fi
 
 echo -e "Generating the certificate using Certbot. \n"
 sudo certbot certonly --webroot
+
+# Preparing the certificate for importing in the nss database
+echo -e "Preparing the certificate for importing in the nss database."
+
+# Generating #pkcs12 file
+echo -e "Generating the #pkcs12 (.p12) file."
+echo -e "Downloading the required Intermediate certificate."
+
+# Downloading the required Intermediate certificate
+DIR=$(mktemp -d)
+CERT="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
+
+wget_output=$(wget -q -P "$DIR" "$CERT")
+if [ $? -ne 0 ]; then
+    echo "Certificates NOT Found OR Saving the certificates in directory failed"
+    echo "try running the script with 'sudo' (root privileges)"
+    exit
+else
+    echo -e "Intermediate Certificate downloaded in $DIR \n"
+fi
+
+# Renaming the certificates
+echo -e "Renaming the certificate."
+for file in "$DIR"/*; do
+    file=${file##*/}
+    # Removing the file extension (.txt) from certificates
+    name=${file%.txt}
+    mv "$DIR"/"$file" "$DIR"/"$name"
+    echo -e "Certificate $DIR/$file renamed to $DIR/$name."
+done
+
+# Now generating the #pkcs12 (.p12) file
+read -p "Enter the cert directory location (e.g. /etc/letsencrypt/live/letsencrypt.libreswan.org): " LetsEncryptCertDir
+
+openssl pkcs12 -export -inkey "LetsEncryptCertDir"/privkey.pem -in "LetsEncryptCertDir"/fullchain.pem -CAfile "$DIR"/"$name" -out generatedCertificate.p12
+
+# Importing the certificate in nss database
+echo -e "\n Importing the certificate in nss database."
+pk12util -d sql:/etc/ipsec.d -i "LetsEncryptCertDir"/generatedCertificate.p12
+
+# Displaying the certificates installed in nss database
+echo -e "Displaying the certificates installed in nss database. \n"
+certutil -L -d sql:/etc/ipsec.d
+
+# Running the test connection
+echo -e "Running the test connection script. \n"
+source test_connection

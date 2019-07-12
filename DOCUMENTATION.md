@@ -24,6 +24,9 @@ It can be downloaded from [here - debian/ubuntu](https://www.cyberciti.biz/faq/h
 ### certbot
 It is required to generate certificates (only if you are using the script for the server side). It can be downloaded from [here](https://certbot.eff.org/)
 
+### openssl
+It is required to generate #pkcs12 (.p12) file for importing in the nss database. It can be downloaded from [here](https://www.openssl.org/source/)
+
 ## Installation
 
 1. clone the [project repository](https://github.com/Rishabh04-02/Libreswan-Opportunistic-IPsec.git) using the following command:
