@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# This script needs to be run as root
+echo "Checking if the script is run as root."
+if [[ $EUID -ne 0 ]]; then
+    echo -e "This script should be run as root. \n"
+    exit
+else
+    echo -e "This script is run as root. Good to go. \n"
+fi
+
+# Updating the certificate using Certbot keeping the private key same
+echo -e "Checking if Certbot is installed. \n"
+certBotInstalled=$(command -v certbot)
+if [ -z "$certBotInstalled" ]; then
+    echo -e "Certbot not installed. \n"
+else
+    echo -e "Certbot is installed, Good to go. \n"
+fi
+
+echo -e "Updating the certificate using Certbot keeping the private key same. \n"
+sudo certbot certonly --webroot
