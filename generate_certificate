@@ -64,7 +64,7 @@ pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir"/generatedCertificate.p12
 echo -e "Displaying the certificates installed in nss database. \n"
 certutil -L -d sql:/etc/ipsec.d
 
-# Now generating the #pkcs12 (.p12) file
+# Now generating the certbot configuration for reusing key
 echo -e "\nUpdating the letsencrypt configuration for reusing key. \n"
 read -p "Enter the config file name (e.g. /etc/letsencrypt/renewal/letsencrypt.libreswan.org.conf): " LetsEncryptConfFile
 echo "reuse_key = True" >>"$LetsEncryptConfFile"

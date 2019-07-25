@@ -56,115 +56,37 @@ This script is the main script which is to be run when installing the project fo
 * Checks for the success in establishing the OE connection.
 * Displays OE connection status to user.
 
-2. `import_certificates`
-* This scripts imports the custom certificates into the NSS database.
-* Save the certificates PKCS#12 (.p12) file in the `certs/custom` directory. The script will import all the certificates available in the directory.
+2. `test_connection`
+
+This script checks for the success of establishing an OE connection, and performs the following tasks:
+* Check for any existing OE connections.
+* Establish an OE connection.
+* Sending pings to the letsencrypt server.
+* Checking the success of establishing OE connection.
+* Displaying connection status to the user.
 
 3. `custom_configuration`
+
 * This script allows user to create custom configurations and run IPsec with them.
-* The script loads the configuration from `config/custom` directory and saves it as the default configuration.
+* The script loads the configuration from config/custom directory and saves it as the default configuration.
 * After saving the configuration the script restarts IPsec and establishes an OE connection.
 * It also displays the connection status to user.
 
-4. `create_connection`
-* This script checks for existing OE connections. Restarts IPsec if any existing OE connection found.
-* After that it establishes a new OE connection.
-* Displays the connection status to user.
+4. `generate_certificate`
 
-## Sample Installation output `setup`
+The script is used Generating the certificate using Certbot, and performing the following tasks:
+* Check if certbot is installed.
+* Preparing the certificate for importing in the nss database.
+* Generating #pkcs12 file.
+* Downloading the required Intermediate certificate.
+* Displaying the certificates installed in nss database.
+* Generating the certbot configuration for reusing key.
 
-### For Client
+5. `update_certificate`
 
-	$ sudo bash setup
-	[sudo] password for user:
-
-	Checking if the script is run as root.
-	This script is run as root. Good to go.
-
-	Installing for server or client? Type (sS/cC) c
-	Checking if IPsec is installed
-	IPsec is installed.
-
-	Checking for any existing OE connections
-	Existing OE Connections Found. Stopping the connections.
-	Redirecting to: systemctl restart ipsec.service
-
-	Downloading the letsencrypt certificates
-	Deleting the certs directories certs/CA , certs/intermediate (if previously present)
-	CA Certificates downloaded.
-	Intermediate Certificates downloaded.
-
-	Initializing the nss database
-	NSS database already initialised - aborted
-	To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
-
-	Importing the downloaded certificates into NSS Database
-	CA certificates Imported successfully.
-	Notice: Trust flag u is set automatically if the private key is present.
-	Notice: Trust flag u is set automatically if the private key is present.
-	Intermediate certificates Imported successfully.
-
-	Saving the required configuration
-	config/oe-letsencrypt-client.conf configuration saved in /etc/ipsec.d
-
-	Restarting Ipsec
-
-	Redirecting to: systemctl restart ipsec.service
-	Establishing an OE connection.
-
-	  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-	                                 Dload  Upload   Total   Spent    Left  Speed
-	100    14  100    14    0     0     51      0 --:--:-- --:--:-- --:--:--    51
-
-	Checking the success of establishing OE connection
-
-	OE Connection established successfully
-
-	Displaying connection status
-
-	006 #2: "private-or-clear#193.110.157.131/32"[1] ...193.110.157.131, type=ESP, add_time=1562298201, inBytes=0, outBytes=0, id='CN=letsencrypt.libreswan.org'
-
-
-### For Server
-
-	$ sudo bash setup
-	[sudo] password for user:
-
-	Checking if the script is run as root.
-	This script is run as root. Good to go.
-
-	Installing for server or client? Type (sS/cC) s
-	Checking if IPsec is installed
-	IPsec is installed.
-
-	Checking for any existing OE connections
-	Existing OE Connections Found. Stopping the connections.
-	Redirecting to: systemctl restart ipsec.service
-
-	Downloading the letsencrypt certificates
-	Deleting the certs directories certs/CA , certs/intermediate (if previously present)
-	CA Certificates downloaded.
-	Intermediate Certificates downloaded.
-
-	Initializing the nss database
-	NSS database already initialised - aborted
-	To wipe the old NSS database, issue: rm /etc/ipsec.d/*.db
-
-	Importing the downloaded certificates into NSS Database
-	CA certificates Imported successfully.
-	Notice: Trust flag u is set automatically if the private key is present.
-	Notice: Trust flag u is set automatically if the private key is present.
-	Intermediate certificates Imported successfully.
-
-	Saving the required configuration
-	config/oe-letsencrypt-server.conf configuration saved in /etc/ipsec.d
-
-	Restarting Ipsec
-
-	Redirecting to: systemctl restart ipsec.service
-	Establishing an OE connection.
-
-
-	Checking the success of establishing OE connection
-
-	Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.)
+This script is used to update the certificate keeping the key same, and performs the following tasks:
+* Updating the certificate using Certbot keeping the private key same.
+* Generating #pkcs12 file.
+* Downloading the required Intermediate certificate.
+* Importing the certificate in nss database.
+* Displaying the certificates installed in nss database.
