@@ -48,7 +48,7 @@ This script is the main script which is to be run when installing the project fo
 This script checks for the success of establishing an OE connection, and performs the following tasks:
 * Check for any existing OE connections.
 * Establish an OE connection.
-* Sending pings to the letsencrypt server.
+* Sending pings to the letsencrypt.libreswan.org server.
 * Checking the success of establishing OE connection.
 * Displaying connection status to the user.
 
