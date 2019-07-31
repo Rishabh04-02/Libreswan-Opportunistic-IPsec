@@ -1,8 +1,2 @@
 EXPERIMENTS/
-certs/CA/*
-certs/intermediate/*
-certs/custom/*
-!certs/CA/.gitkeep
-!certs/intermediate/.gitkeep
-!certs/custom/.gitkeep
 logs/
