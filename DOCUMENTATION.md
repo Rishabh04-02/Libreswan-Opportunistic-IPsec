@@ -12,20 +12,7 @@ It can be installed using any of the following methods:
 
 Note - * refers to the latest version available.
 
-### curl
-It can be downloaded from [here](https://curl.haxx.se/download.html).
-
-### certutil
-It can be downloaded from [here](https://chromium.googlesource.com/chromium/src/+/HEAD/docs/linux_cert_management.md).
-
-### wget
-It can be downloaded from [here - debian/ubuntu](https://www.cyberciti.biz/faq/how-to-install-wget-togetrid-of-error-bash-wget-command-not-found/) OR [here - RHEL/CentOS 7](https://www.cyberciti.biz/faq/yum-install-wget-redhat-cetos-rhel-7/)
-
-### certbot
-It is required to generate certificates (only if you are using the script for the server side). It can be downloaded from [here](https://certbot.eff.org/)
-
-### openssl
-It is required to generate #pkcs12 (.p12) file for importing in the nss database. It can be downloaded from [here](https://www.openssl.org/source/)
+### curl, certutil, wget, certbot, openssl
 
 ## Installation
 
@@ -61,7 +48,7 @@ This script is the main script which is to be run when installing the project fo
 This script checks for the success of establishing an OE connection, and performs the following tasks:
 * Check for any existing OE connections.
 * Establish an OE connection.
-* Sending pings to the letsencrypt server.
+* Sending pings to the letsencrypt.libreswan.org server.
 * Checking the success of establishing OE connection.
 * Displaying connection status to the user.
 
