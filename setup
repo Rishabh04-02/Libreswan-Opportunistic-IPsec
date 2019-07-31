@@ -127,7 +127,7 @@ if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
 fi
 
 # Sending pings to the letsencrypt server
-echo -e "Sending ping(IPv4) to the letsencrypt server. \n"
+echo -e "Sending ping(IPv4) to the letsencrypt.libreswan.org server. \n"
 ping -4 -c 5 letsencrypt.libreswan.org
 
 # Checking the success of establishing OE connection
