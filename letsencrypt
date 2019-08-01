@@ -18,7 +18,7 @@ check_root() {
 test() {
     # Checking for any existing OE connections
     echo -e "Checking for any existing OE connections"
-    oeExisting=$(ipsec traffic)
+    oeExisting=$(ipsec traffic | grep private)
     if [ -z "$oeExisting" ]; then
         echo -e "No existing OE connections found. Good to go.\n"
     else
@@ -43,7 +43,7 @@ test() {
 
     # Checking the success of establishing OE connection
     echo -e "\nChecking the success of establishing OE connection \n"
-    oeSuccess=$(ipsec traffic)
+    oeSuccess=$(ipsec traffic | grep private)
     if [ -z "$oeSuccess" ]; then
         echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.) \n"
         exit
@@ -51,7 +51,7 @@ test() {
         echo -e "OE Connection established successfully \n"
         # Displaying connection status
         echo -e "Displaying connection status \n"
-        ipsec traffic
+        ipsec traffic | grep private
     fi
 }
 
@@ -62,7 +62,7 @@ setup() {
 
     # Checking for any existing OE connections
     echo -e "Checking for any existing OE connections"
-    oeExisting=$(ipsec traffic)
+    oeExisting=$(ipsec traffic | grep private)
     if [ -z "$oeExisting" ]; then
         echo "No existing OE connections found. Good to go."
     else
@@ -167,15 +167,15 @@ setup() {
 
     # Checking the success of establishing OE connection
     echo -e "\nChecking the success of establishing OE connection \n"
-    oeSuccess=$(ipsec traffic)
+    oeSuccess=$(ipsec traffic | grep private)
     if [ -z "$oeSuccess" ]; then
-        echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.) \n"
+        echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks for private connections in the ipsec traffic.) \n"
         exit
     else
         echo -e "OE Connection established successfully \n"
         # Displaying connection status
         echo -e "Displaying connection status \n"
-        ipsec traffic
+        ipsec traffic | grep private
     fi
 }
 
@@ -214,7 +214,7 @@ custom_configuration() {
 
     # Checking the success of establishing OE connection
     echo -e "\nChecking the success of establishing OE connection \n"
-    oeSuccess=$(ipsec traffic)
+    oeSuccess=$(ipsec traffic | grep private)
     if [ -z "$oeSuccess" ]; then
         echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic. OR Check if there is only one '.conf' file in the $ipdir) \n"
         exit
@@ -222,7 +222,7 @@ custom_configuration() {
         echo -e "OE Connection established successfully \n"
         # Displaying connection status
         echo -e "Displaying connection status \n"
-        ipsec traffic
+        ipsec traffic | grep private
     fi
 }
 
