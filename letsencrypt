@@ -14,22 +14,6 @@ check_root() {
     fi
 }
 
-# function for checking if IPsec is installed
-check_for_ipsec() {
-    # Checking if IPsec is installed
-    echo "Checking if IPsec is installed"
-    ipdir="/etc/ipsec.d"
-    if [ ! -d "$ipdir" ]; then
-        echo "Directory /etc/ipsec.d DOES NOT exists. Please install IPsec (https://libreswan.org)"
-        echo "For Fedora - dnf -y install libreswan-3.*"
-        echo "For Centos - yum -y install libreswan-3.*"
-        echo "For Ubuntu - apt-get -y install libreswan"
-        exit
-    else
-        echo -e "IPsec is installed. \n"
-    fi
-}
-
 # function for testing OE connection
 test() {
     # Checking for any existing OE connections
@@ -378,17 +362,14 @@ case $1 in
 
 "test")
     check_root
-    check_for_ipsec
     test
     ;;
 "setup")
     check_root
-    check_for_ipsec
     setup
     ;;
 "configuration")
     check_root
-    check_for_ipsec
     custom_configuration
     ;;
 "generatecertificate")
