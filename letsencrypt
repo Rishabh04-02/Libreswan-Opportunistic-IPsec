@@ -300,11 +300,11 @@ update_certificate() {
 help() {
     echo -e "Usage: ipsec letsencrypt [arguments] \n"
     echo -e "Available [arguments]"
-    echo -e "setup, test, generatecertificate, updatecertificate, help \n"
-    echo -e "setup  -  For initial setup \n usage: ipsec letsencrypt setup \n"
-    echo -e "test  -  For testing the configuration/connections \n usage: ipsec letsencrypt test \n"
-    echo -e "generatecertificate  -  For generating certificate \n usage: ipsec letsencrypt generatecertificate \n"
-    echo -e "updatecertificate  -  For updating the generated certificate (keeping the private key same) \n usage: ipsec letsencrypt updatecertificate"
+    echo -e "setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h \n"
+    echo -e "setup, -s  :  For initial setup \n usage: ipsec letsencrypt setup OR ipsec letsencrypt -s \n"
+    echo -e "test, -t  -  For testing the configuration/connections \n usage: ipsec letsencrypt test OR ipsec letsencrypt -t\n"
+    echo -e "generatecertificate, -gc  -  For generating certificate \n usage: ipsec letsencrypt generatecertificate OR ipsec letsencrypt -gc\n"
+    echo -e "updatecertificate, -uc  -  For updating the generated certificate (keeping the private key same) \n usage: ipsec letsencrypt updatecertificate OR ipsec letsencrypt -uc"
 }
 
 case $1 in
