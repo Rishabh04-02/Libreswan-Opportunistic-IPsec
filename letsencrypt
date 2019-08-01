@@ -7,8 +7,7 @@ ipdir="/etc/ipsec.d"
 
 # function for checking if the command is run as root
 check_root() {
-    # This command needs to be run as root
-    echo "Checking if the command is run as root."
+    # Checking if the command is run as root, This command needs to be run as root
     if [[ $EUID -ne 0 ]]; then
         echo -e "This command should be run as root. \n"
         exit
@@ -310,19 +309,19 @@ help() {
 
 case $1 in
 
-"test")
+"test" | "-t")
     check_root
     test
     ;;
-"setup")
+"setup" | "-s")
     check_root
     setup
     ;;
-"generatecertificate")
+"generatecertificate" | "-gc")
     check_root
     generate_certificate
     ;;
-"updatecertificate")
+"updatecertificate" | "-uc")
     check_root
     update_certificate
     ;;
