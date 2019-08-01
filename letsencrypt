@@ -165,54 +165,6 @@ setup() {
     fi
 }
 
-# function for using custom configuration
-custom_configuration() {
-    # Copy the custom configuration in config/custom/ directory
-    read -p "Copy the custom configuration file in 'config/custom/' directory and Type (yY): " confCopied
-
-    if [ "$confCopied" = "y" ] || [ "$confCopied" = "Y" ]; then
-        for file in config/custom/*; do
-            file=${file##*/}
-            configFile=config/custom/"$file"
-            cp "$configFile" "$ipdir"
-            echo "restoring the security context of $ipdir/$file using restorecon."
-            restorecon "$ipdir"/"$file"
-            echo -e "\nNote - Make sure there is only one '.conf' file in the $ipdir , Listing contents of $ipdir\n"
-            ls "$ipdir"
-        done
-    else
-        echo -e "\nNo custom config file found. \n"
-    fi
-
-    # Restarting Ipsec
-    echo -e "Restarting Ipsec \n"
-    ipsec restart
-    sleep 3
-
-    # Establishing an OE connection
-    echo -e "Establishing an OE connection. \n"
-    if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
-        # Get the IP of client
-        getIP=$(curl ifconfig.me)
-        # Establish an OE connection in quiet mode
-        ## Take server IP as user input (once the initial testing completes)
-        ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 >/dev/null
-    fi
-
-    # Checking the success of establishing OE connection
-    echo -e "\nChecking the success of establishing OE connection \n"
-    oeSuccess=$(ipsec traffic | grep private)
-    if [ -z "$oeSuccess" ]; then
-        echo -e "Failed to establish an OE connection. (Check if there is only one '.conf' file in the $ipdir) \n"
-        exit
-    else
-        echo -e "OE Connection established successfully \n"
-        # Displaying connection status
-        echo -e "Displaying connection status \n"
-        ipsec traffic | grep private
-    fi
-}
-
 # function for generating a certificates
 generate_certificate() {
     # Generating the certificate using Certbot
@@ -354,10 +306,6 @@ case $1 in
 "setup")
     check_root
     setup
-    ;;
-"configuration")
-    check_root
-    custom_configuration
     ;;
 "generatecertificate")
     check_root
