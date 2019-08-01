@@ -28,6 +28,7 @@ test() {
         echo "Existing OE Connections Found. Stopping the connections."
         # Stopping the existing OE connections
         ipsec restart
+        sleep 3
     fi
 
     # Establishing an OE connection and sending pings to letsencrypt.libreswan.org server
@@ -62,6 +63,7 @@ setup() {
         echo "Existing OE Connections Found. Stopping the connections."
         # Stopping the existing OE connections
         ipsec restart
+        sleep 3
     fi
 
     # Downloading the letsencrypt certificates
@@ -139,11 +141,12 @@ setup() {
     # Restarting Ipsec
     echo -e "Restarting Ipsec \n"
     ipsec restart
+    sleep 3
 
     # Establishing an OE connection for clients
     if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
         echo -e "Establishing an OE connection. \n"
-        # Establishing an OE connection and sending pings to the letsencrypt server
+        # Establishing an OE connection and sendipsec restarting pings to the letsencrypt server
         echo -e "Sending ping(IPv4) to the letsencrypt.libreswan.org server. \n"
         ping -4 -c 5 letsencrypt.libreswan.org
 
@@ -184,6 +187,7 @@ custom_configuration() {
     # Restarting Ipsec
     echo -e "Restarting Ipsec \n"
     ipsec restart
+    sleep 3
 
     # Establishing an OE connection
     echo -e "Establishing an OE connection. \n"
