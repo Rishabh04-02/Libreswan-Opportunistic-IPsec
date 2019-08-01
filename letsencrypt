@@ -32,7 +32,12 @@ test() {
 
     # Establishing an OE connection and sending pings to letsencrypt.libreswan.org server
     echo -e "Sending ping(IPv4) to letsencrypt.libreswan.org server. \n"
-    ping -4 -c 5 letsencrypt.libreswan.org
+    ping -4 -c 5 letsencrypt.libreswan.org &>/dev/null
+    if [ "$?" -eq 0 ]; then
+        echo "Ping Successful"
+    else
+        echo "Ping Unsuccessful"
+    fi
 
     # Checking the success of establishing OE connection
     echo -e "\nChecking the success of establishing OE connection \n"
@@ -147,7 +152,12 @@ setup() {
         echo -e "Establishing an OE connection. \n"
         # Establishing an OE connection and sendipsec restarting pings to the letsencrypt server
         echo -e "Sending ping(IPv4) to the letsencrypt.libreswan.org server. \n"
-        ping -4 -c 5 letsencrypt.libreswan.org
+        ping -4 -c 5 letsencrypt.libreswan.org &>/dev/null
+        if [ "$?" -eq 0 ]; then
+            echo "Ping Successful"
+        else
+            echo "Ping Unsuccessful"
+        fi
 
         # Checking the success of establishing OE connection
         echo -e "\nChecking the success of establishing OE connection \n"
