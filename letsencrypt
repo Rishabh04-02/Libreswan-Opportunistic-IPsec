@@ -2,15 +2,18 @@
 
 FileName=$(basename $0)
 
-# function for checking if script is run as root
+# ipdir variable for getting location to save the configuration files
+ipdir="/etc/ipsec.d"
+
+# function for checking if the command is run as root
 check_root() {
-    # This script needs to be run as root
-    echo "Checking if the script is run as root."
+    # This command needs to be run as root
+    echo "Checking if the command is run as root."
     if [[ $EUID -ne 0 ]]; then
-        echo -e "This script should be run as root. \n"
+        echo -e "This command should be run as root. \n"
         exit
     else
-        echo -e "This script is run as root. Good to go. \n"
+        echo -e "This command is run as root. Good to go. \n"
     fi
 }
 
@@ -27,18 +30,8 @@ test() {
         ipsec restart
     fi
 
-    # Establishing an OE connection
-    echo -e "\nEstablishing an OE connection. \n"
-    if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
-        # Get the IP of client
-        getIP=$(curl ifconfig.me)
-        # Establish an OE connection in quiet mode
-        ## Take server IP as user input (once the initial testing completes)
-        ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 >/dev/null
-    fi
-
-    # Sending pings to the letsencrypt server
-    echo -e "Sending ping(IPv4) to the letsencrypt server. \n"
+    # Establishing an OE connection and sending pings to letsencrypt.libreswan.org server
+    echo -e "Sending ping(IPv4) to letsencrypt.libreswan.org server. \n"
     ping -4 -c 5 letsencrypt.libreswan.org
 
     # Checking the success of establishing OE connection
@@ -98,22 +91,18 @@ setup() {
         echo "Certificates NOT Found OR Saving the certificates in directory failed"
         exit
     else
-        echo -e "Intermediate Certificates downloaded in $DIR2 \n"
+        echo -e "Intermediate Certificates downloaded in $DIR2. \n"
     fi
 
     # Checking if nss database exists
-    echo "Checking if nss database exists"
     dbFileCount=$(ls "$ipdir"/*.db 2>/dev/null | wc -l)
-    if [ $dbFileCount != 0 ]; then
-        echo -e "nss database exists. \n"
-    else
-        # Initializing the nss database
-        echo "nss database does not exist. Initializing the nss database"
+    if [ $dbFileCount -eq 0 ]; then
+        # NSS database does not exist. Initializing the nss database
         ipsec initnss
     fi
 
-    # Importing the CA certificates
-    echo "Importing the downloaded certificates into NSS Database"
+    # Importing the CA certificates in NSS database
+    echo "Importing the downloaded certificates into the database"
     for file in "$DIR1"/*; do
         file=${file##*/}
         # Removing the file extension (.pem.txt) from certificates
@@ -122,7 +111,7 @@ setup() {
     done
     echo "CA certificates Imported successfully."
 
-    # Importing the Intermediate certificates
+    # Importing the Intermediate certificates in NSS database
     for file in "$DIR2"/*; do
         file=${file##*/}
         # Removing the file extension (.pem.txt) from certificates
@@ -151,31 +140,25 @@ setup() {
     echo -e "Restarting Ipsec \n"
     ipsec restart
 
-    # Establishing an OE connection
-    echo -e "Establishing an OE connection. \n"
+    # Establishing an OE connection for clients
     if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
-        # Get the IP of client
-        getIP=$(curl ifconfig.me)
-        # Establish an OE connection in quiet mode
-        ## Take server IP as user input (once the initial testing completes)
-        ipsec whack --oppohere "$getIP" --oppothere 193.110.157.131 >/dev/null
-    fi
+        echo -e "Establishing an OE connection. \n"
+        # Establishing an OE connection and sending pings to the letsencrypt server
+        echo -e "Sending ping(IPv4) to the letsencrypt.libreswan.org server. \n"
+        ping -4 -c 5 letsencrypt.libreswan.org
 
-    # Sending pings to the letsencrypt server
-    echo -e "Sending ping(IPv4) to the letsencrypt.libreswan.org server. \n"
-    ping -4 -c 5 letsencrypt.libreswan.org
-
-    # Checking the success of establishing OE connection
-    echo -e "\nChecking the success of establishing OE connection \n"
-    oeSuccess=$(ipsec traffic | grep private)
-    if [ -z "$oeSuccess" ]; then
-        echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks for private connections in the ipsec traffic.) \n"
-        exit
-    else
-        echo -e "OE Connection established successfully \n"
-        # Displaying connection status
-        echo -e "Displaying connection status \n"
-        ipsec traffic | grep private
+        # Checking the success of establishing OE connection
+        echo -e "\nChecking the success of establishing OE connection \n"
+        oeSuccess=$(ipsec traffic | grep private)
+        if [ -z "$oeSuccess" ]; then
+            echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks for private connections in the ipsec traffic.) \n"
+            exit
+        else
+            echo -e "OE Connection established successfully \n"
+            # Displaying connection status
+            echo -e "Displaying connection status \n"
+            ipsec traffic | grep private
+        fi
     fi
 }
 
@@ -216,7 +199,7 @@ custom_configuration() {
     echo -e "\nChecking the success of establishing OE connection \n"
     oeSuccess=$(ipsec traffic | grep private)
     if [ -z "$oeSuccess" ]; then
-        echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic. OR Check if there is only one '.conf' file in the $ipdir) \n"
+        echo -e "Failed to establish an OE connection. (Check if there is only one '.conf' file in the $ipdir) \n"
         exit
     else
         echo -e "OE Connection established successfully \n"
