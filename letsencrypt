@@ -303,7 +303,7 @@ help() {
     echo -e "setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h \n"
     echo -e "setup, -s  :  For initial setup \n usage: ipsec letsencrypt setup OR ipsec letsencrypt -s \n"
     echo -e "test, -t  -  For testing the configuration/connections \n usage: ipsec letsencrypt test OR ipsec letsencrypt -t\n"
-    echo -e "generatecertificate, -gc  -  For generating certificate \n usage: ipsec letsencrypt generatecertificate OR ipsec letsencrypt -gc\n"
+    echo -e "generatecertificate, -gc  -  For generating the certificate \n usage: ipsec letsencrypt generatecertificate OR ipsec letsencrypt -gc\n"
     echo -e "updatecertificate, -uc  -  For updating the generated certificate (keeping the private key same) \n usage: ipsec letsencrypt updatecertificate OR ipsec letsencrypt -uc"
 }
 
@@ -329,6 +329,7 @@ case $1 in
     help
     ;;
 *)
-    echo "Subcommand $1 not found"
+    echo "[argument] $1 not found"
+    echo "try: ipsec letsencrypt -h for help"
     ;;
 esac
