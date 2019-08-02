@@ -1,6 +1,7 @@
 #!/bin/bash
 
 FileName=$(basename $0)
+ServerClient=$2
 
 # ipdir variable for getting location to save the configuration files
 ipdir="/etc/ipsec.d"
@@ -8,21 +9,21 @@ ipdir="/etc/ipsec.d"
 # function for checking if the command is run as root
 check_root() {
     # Checking if the command is run as root, This command needs to be run as root
-    if [[ $EUID -ne 0 ]]; then
-        echo -e "This command should be run as root. \n"
+    if [ ${EUID} -ne 0 ]; then
+        echo "This command should be run as root."
         exit
     else
-        echo -e "This command is run as root. Good to go. \n"
+        echo "This command is run as root. Good to go."
     fi
 }
 
 # function for testing OE connection
 test() {
     # Checking for any existing OE connections
-    echo -e "Checking for any existing OE connections"
+    echo "Checking for any existing OE connections"
     oeExisting=$(ipsec traffic | grep private)
     if [ -z "$oeExisting" ]; then
-        echo -e "No existing OE connections found. Good to go.\n"
+        echo "No existing OE connections found. Good to go."
     else
         echo "Existing OE Connections Found. Stopping the connections."
         # Stopping the existing OE connections
@@ -31,7 +32,7 @@ test() {
     fi
 
     # Establishing an OE connection and sending pings to letsencrypt.libreswan.org server
-    echo -e "Sending ping(IPv4) to letsencrypt.libreswan.org server. \n"
+    echo "Sending ping(IPv4) to letsencrypt.libreswan.org server."
     ping -4 -c 5 letsencrypt.libreswan.org &>/dev/null
     if [ "$?" -eq 0 ]; then
         echo "Ping Successful"
@@ -40,15 +41,15 @@ test() {
     fi
 
     # Checking the success of establishing OE connection
-    echo -e "\nChecking the success of establishing OE connection \n"
+    echo "Checking the success of establishing OE connection"
     oeSuccess=$(ipsec traffic | grep private)
     if [ -z "$oeSuccess" ]; then
-        echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.) \n"
+        echo "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.)"
         exit
     else
-        echo -e "OE Connection established successfully \n"
+        echo "OE Connection established successfully."
         # Displaying connection status
-        echo -e "Displaying connection status \n"
+        echo "Displaying connection status."
         ipsec traffic | grep private
     fi
 }
@@ -56,10 +57,21 @@ test() {
 # Function for performaing Initial setup
 setup() {
     # Installing for client or server?
-    read -p "Installing for server or client? Type (sS/cC): " answer
+    if [ "$ServerClient" = "--client" ]; then
+        answer="c"
+        echo "Installing for Client."
+    elif [ "$ServerClient" = "--server" ]; then
+        answer="s"
+        echo "Installing for Server."
+    else
+        echo "Invalid [argument] $ServerClient"
+        exit
+    fi
+
+    #read -p "Installing for server or client? Type (sS/cC): " answer
 
     # Checking for any existing OE connections
-    echo -e "Checking for any existing OE connections"
+    echo "Checking for any existing OE connections"
     oeExisting=$(ipsec traffic | grep private)
     if [ -z "$oeExisting" ]; then
         echo "No existing OE connections found. Good to go."
@@ -71,7 +83,7 @@ setup() {
     fi
 
     # Downloading the letsencrypt certificates
-    echo -e "\nDownloading the letsencrypt certificates"
+    echo "Downloading the letsencrypt certificates"
     DIR1=$(mktemp -d)
     # CA certificates
     CERT1="https://letsencrypt.org/certs/isrgrootx1.pem.txt"
@@ -97,7 +109,7 @@ setup() {
         echo "Certificates NOT Found OR Saving the certificates in directory failed"
         exit
     else
-        echo -e "Intermediate Certificates downloaded in $DIR2. \n"
+        echo "Intermediate Certificates downloaded in $DIR2."
     fi
 
     # Checking if nss database exists
@@ -124,7 +136,7 @@ setup() {
         name=${file%.pem.txt}
         certutil -A -d sql:/etc/ipsec.d -n "$name" -i "$DIR2"/"$file" -t "u,u,u"
     done
-    echo -e "Intermediate certificates Imported successfully. \n"
+    echo "Intermediate certificates Imported successfully."
 
     # Copying the required configuration
     if [ "$answer" = "s" ] || [ "$answer" = "S" ]; then
@@ -139,19 +151,19 @@ setup() {
 
     echo "Saving the required configuration"
     echo "$configFileName configuration saved in $ipdir"
-    echo -e "restoring the security context of $ipdir/$configFileName using restorecon. \n"
+    echo "restoring the security context of $ipdir/$configFileName using restorecon."
     restorecon "$ipdir"/"$configFileName"
 
     # Restarting Ipsec
-    echo -e "Restarting Ipsec \n"
+    echo "Restarting Ipsec "
     ipsec restart
     sleep 3
 
     # Establishing an OE connection for clients
     if [ "$answer" = "c" ] || [ "$answer" = "C" ]; then
-        echo -e "Establishing an OE connection. \n"
+        echo "Establishing an OE connection."
         # Establishing an OE connection and sendipsec restarting pings to the letsencrypt server
-        echo -e "Sending ping(IPv4) to the letsencrypt.libreswan.org server. \n"
+        echo "Sending ping(IPv4) to the letsencrypt.libreswan.org server."
         ping -4 -c 5 letsencrypt.libreswan.org &>/dev/null
         if [ "$?" -eq 0 ]; then
             echo "Ping Successful"
@@ -160,15 +172,15 @@ setup() {
         fi
 
         # Checking the success of establishing OE connection
-        echo -e "\nChecking the success of establishing OE connection \n"
+        echo "Checking the success of establishing OE connection"
         oeSuccess=$(ipsec traffic | grep private)
         if [ -z "$oeSuccess" ]; then
-            echo -e "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks for private connections in the ipsec traffic.) \n"
+            echo "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks for private connections in the ipsec traffic.)"
             exit
         else
-            echo -e "OE Connection established successfully \n"
+            echo "OE Connection established successfully"
             # Displaying connection status
-            echo -e "Displaying connection status \n"
+            echo "Displaying connection status."
             ipsec traffic | grep private
         fi
     fi
@@ -177,24 +189,24 @@ setup() {
 # function for generating a certificates
 generate_certificate() {
     # Generating the certificate using Certbot
-    echo -e "Checking if Certbot is installed. \n"
+    echo "Checking if Certbot is installed."
     certBotInstalled=$(command -v certbot)
     if [ -z "$certBotInstalled" ]; then
-        echo -e "Certbot not installed. \n"
+        echo "Certbot not installed."
         exit
     else
-        echo -e "Certbot is installed, Good to go. \n"
+        echo "Certbot is installed, Good to go."
     fi
 
-    echo -e "Generating the certificate using Certbot. \n"
+    echo "Generating the certificate using Certbot."
     sudo certbot certonly --webroot
 
     # Preparing the certificate for importing in the nss database
-    echo -e "Preparing the certificate for importing in the nss database."
+    echo "Preparing the certificate for importing in the nss database."
 
     # Generating #pkcs12 file
-    echo -e "Generating the #pkcs12 (.p12) file."
-    echo -e "Downloading the required Intermediate certificate."
+    echo "Generating the #pkcs12 (.p12) file."
+    echo "Downloading the required Intermediate certificate."
 
     # Downloading the required Intermediate certificate
     DIR=$(mktemp -d)
@@ -205,17 +217,17 @@ generate_certificate() {
         echo "Certificates NOT Found OR Saving the certificate in directory failed"
         exit
     else
-        echo -e "Intermediate Certificate downloaded in $DIR \n"
+        echo "Intermediate Certificate downloaded in $DIR"
     fi
 
     # Renaming the certificates
-    echo -e "Renaming the certificate."
+    echo "Renaming the certificate."
     for file in "$DIR"/*; do
         file=${file##*/}
         # Removing the file extension (.txt) from certificates
         name=${file%.txt}
         mv "$DIR"/"$file" "$DIR"/"$name"
-        echo -e "Certificate $DIR/$file renamed to $DIR/$name."
+        echo "Certificate $DIR/$file renamed to $DIR/$name."
     done
 
     # Now generating the #pkcs12 (.p12) file
@@ -224,35 +236,35 @@ generate_certificate() {
     openssl pkcs12 -export -inkey "$LetsEncryptCertDir"/privkey.pem -in "$LetsEncryptCertDir"/fullchain.pem -CAfile "$DIR"/"$name" -out "$LetsEncryptCertDir"/generatedCertificate.p12
 
     # Importing the certificate in nss database
-    echo -e "\nImporting the certificate in nss database."
+    echo "Importing the certificate in nss database."
     pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir"/generatedCertificate.p12
 
     # Displaying the certificates installed in nss database
-    echo -e "Displaying the certificates installed in nss database. \n"
+    echo "Displaying the certificates installed in nss database."
     certutil -L -d sql:/etc/ipsec.d
 
     # Now generating the certbot configuration for reusing key
-    echo -e "\nUpdating the letsencrypt configuration for reusing key. \n"
+    echo "Updating the letsencrypt configuration for reusing key."
     read -p "Enter the config file name (e.g. /etc/letsencrypt/renewal/letsencrypt.libreswan.org.conf): " LetsEncryptConfFile
     echo "reuse_key = True" >>"$LetsEncryptConfFile"
 
     # To confirm the success try running the test connection script on the client
-    echo -e "\nTo confirm the success try running the test connection script on the client"
+    echo "To confirm the success try running the test connection script on the client"
 }
 
 # function for updating the issued certificates
 update_certificate() {
     # Updating the certificate using Certbot keeping the private key same
-    echo -e "Checking if Certbot is installed. \n"
+    echo "Checking if Certbot is installed."
     certBotInstalled=$(command -v certbot)
     if [ -z "$certBotInstalled" ]; then
-        echo -e "Certbot not installed. \n"
+        echo "Certbot not installed."
         exit
     else
-        echo -e "Certbot is installed, Good to go. \n"
+        echo "Certbot is installed, Good to go."
     fi
 
-    echo -e "Updating the certificate using Certbot keeping the private key same. \n"
+    echo "Updating the certificate using Certbot keeping the private key same."
     certbot renew --reuse-key
 
     # Did your certificate update?
@@ -261,10 +273,10 @@ update_certificate() {
         exit
     else
         # Importing the updated certificate in the nss database
-        echo -e "Importing the updated certificate in the nss database"
+        echo "Importing the updated certificate in the nss database"
         # Generating #pkcs12 file
-        echo -e "Generating the #pkcs12 (.p12) file."
-        echo -e "Downloading the required Intermediate certificate."
+        echo "Generating the #pkcs12 (.p12) file."
+        echo "Downloading the required Intermediate certificate."
 
         # Downloading the required Intermediate certificate
         DIR=$(mktemp -d)
@@ -275,17 +287,17 @@ update_certificate() {
             echo "Certificates NOT Found OR Saving the certificate in directory failed"
             exit
         else
-            echo -e "Intermediate Certificate downloaded in $DIR \n"
+            echo "Intermediate Certificate downloaded in $DIR"
         fi
 
         # Renaming the certificates
-        echo -e "Renaming the certificate."
+        echo "Renaming the certificate."
         for file in "$DIR"/*; do
             file=${file##*/}
             # Removing the file extension (.txt) from certificates
             name=${file%.txt}
             mv "$DIR"/"$file" "$DIR"/"$name"
-            echo -e "Certificate $DIR/$file renamed to $DIR/$name."
+            echo "Certificate $DIR/$file renamed to $DIR/$name."
         done
 
         # Now generating the #pkcs12 (.p12) file
@@ -294,27 +306,27 @@ update_certificate() {
         openssl pkcs12 -export -inkey "$LetsEncryptCertDir"/privkey.pem -in "$LetsEncryptCertDir"/fullchain.pem -CAfile "$DIR"/"$name" -out "$LetsEncryptCertDir"/generatedCertificate.p12
 
         # Importing the certificate in nss database
-        echo -e "\nImporting the certificate in nss database."
+        echo "Importing the certificate in nss database."
         pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir"/generatedCertificate.p12
 
         # Displaying the certificates installed in nss database
-        echo -e "Displaying the certificates installed in nss database. \n"
+        echo "Displaying the certificates installed in nss database."
         certutil -L -d sql:/etc/ipsec.d
 
         # To confirm the success try running the test connection script on the client
-        echo -e "\nTo confirm the success try running the test connection script on the client"
+        echo "To confirm the success try running the test connection script on the client"
     fi
 }
 
 # function for showing help
 help() {
-    echo -e "Usage: ipsec letsencrypt [arguments] \n"
-    echo -e "Available [arguments]"
-    echo -e "setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h \n"
-    echo -e "setup, -s  :  For initial setup \n usage: ipsec letsencrypt setup OR ipsec letsencrypt -s \n"
-    echo -e "test, -t  -  For testing the configuration/connections \n usage: ipsec letsencrypt test OR ipsec letsencrypt -t\n"
-    echo -e "generatecertificate, -gc  -  For generating the certificate \n usage: ipsec letsencrypt generatecertificate OR ipsec letsencrypt -gc\n"
-    echo -e "updatecertificate, -uc  -  For updating the generated certificate (keeping the private key same) \n usage: ipsec letsencrypt updatecertificate OR ipsec letsencrypt -uc"
+    echo "Usage: ipsec letsencrypt [arguments]"
+    echo "Available [arguments]"
+    echo "setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h"
+    echo "setup, -s  :  For initial setup.  usage: ipsec letsencrypt setup OR ipsec letsencrypt -s"
+    echo "test, -t  -  For testing the configuration/connections.  usage: ipsec letsencrypt test OR ipsec letsencrypt -t"
+    echo "generatecertificate, -gc  -  For generating the certificate.  usage: ipsec letsencrypt generatecertificate OR ipsec letsencrypt -gc"
+    echo "updatecertificate, -uc  -  For updating the generated certificate (keeping the private key same).  usage: ipsec letsencrypt updatecertificate OR ipsec letsencrypt -uc"
 }
 
 case $1 in
