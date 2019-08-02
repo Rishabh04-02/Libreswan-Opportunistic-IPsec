@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 FileName=$(basename $0)
 ServerClient=$2
 
 # ipdir variable for getting location to save the configuration files
-ipdir="/etc/ipsec.d"
+ipdir="@IPSEC_NSSDIR@"
 
 # function for checking if the command is run as root
 check_root() {
@@ -151,8 +151,13 @@ setup() {
 
     echo "Saving the required configuration"
     echo "$configFileName configuration saved in $ipdir"
-    echo "restoring the security context of $ipdir/$configFileName using restorecon."
-    restorecon "$ipdir"/"$configFileName"
+    # restoring the security context of $ipdir/$configFileName using restorecon.
+    checkRestorecon=$(which restorecon 2>/dev/null)
+    if [ -n "${checkRestorecon}" -a -x "${checkRestorecon}" ]; then
+        restorecon "$ipdir"/"$configFileName"
+    else
+        echo "restorecon not installed"
+    fi
 
     # Restarting Ipsec
     echo "Restarting Ipsec "
