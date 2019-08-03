@@ -1,34 +1,26 @@
 # Libreswan Opportunistic IPsec Documentation
 
 ## Prerequisite
-### IPsec -  [Libreswan](https://github.com/libreswan/libreswan/)
-It can be installed using any of the following methods:
-1. Download page official website - [https://download.libreswan.org/](https://download.libreswan.org/)
-2. GitHub repository [https://github.com/libreswan/libreswan/](https://github.com/libreswan/libreswan/)
-3. Using the package manager in various Linux distributions.
-
-### curl, certutil, wget, certbot, openssl
+1. IPsec -  [Libreswan](https://github.com/libreswan/libreswan/)
+2. curl
+3. certutil
+4. wget
+5. certbot
+6. openssl
 
 ## Installation
 
-1. clone the [project repository](https://github.com/Rishabh04-02/Libreswan-Opportunistic-IPsec.git) using the following command:
-` git clone https://github.com/Rishabh04-02/Libreswan-Opportunistic-IPsec.git`
-
-2. Go to the project directory using the following command:
-`cd Libreswan-Opportunistic-IPsec`
-
-3. Run the letsencrypt file:
-`sudo bash letsencrypt [argument]`
+Follow these [Installation instructions](https://github.com/libreswan/libreswan/blob/master/README.md#compiling-the-userland-and-ike-daemon-manually-in-usrlocal)
 
 ## Available [arguments]
-Note - To get the list of all the acceptable arguments run `letsencrypt -h` OR `letsencrypt help`
+Note - To get the list of all the acceptable arguments run `ipsec letsencrypt -h` OR `ipsec letsencrypt help`
 
 > setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h
 
 ## Functions of various [arguments]
 Note - OE refers to Opportunistic Encryption.
 
-1. `letsencrypt setup` OR `letsencrypt -s`
+1. `ipsec letsencrypt setup` OR `ipsec letsencrypt -s`
 
 For initial setup, it is to be run when installing the project for the first time. This [argument] performs the following tasks:
 * performs the 1st time server/client Installation.
@@ -41,7 +33,7 @@ For initial setup, it is to be run when installing the project for the first tim
 * Checks for the success in establishing the OE connection.
 * Displays OE connection status to user.
 
-2. `letsencrypt test` OR `letsencrypt -t`
+2. `ipsec letsencrypt test` OR `ipsec letsencrypt -t`
 
 For testing the configuration/connections. This [argument] checks for the success of establishing an OE connection, and performs the following tasks:
 * Check for any existing OE connections.
@@ -50,7 +42,7 @@ For testing the configuration/connections. This [argument] checks for the succes
 * Checking the success of establishing OE connection.
 * Displaying connection status to the user.
 
-3. `letsencrypt generatecertificate` OR `letsencrypt -gc`
+3. `ipsec letsencrypt generatecertificate` OR `ipsec letsencrypt -gc`
 
 For generating the certificate. This [argument] is used for Generating the certificate using Certbot, and performing the following tasks:
 * Check if certbot is installed.
@@ -60,7 +52,7 @@ For generating the certificate. This [argument] is used for Generating the certi
 * Displaying the certificates installed in nss database.
 * Generating the certbot configuration for reusing key.
 
-4. `letsencrypt updatecertificate` OR `letsencrypt -uc`
+4. `ipsec letsencrypt updatecertificate` OR `ipsec letsencrypt -uc`
 
 For updating the generated certificate (keeping the private key same). This [argument] is used to update the certificate keeping the private key same, and performs the following tasks:
 * Updating the certificate using Certbot keeping the private key same.
