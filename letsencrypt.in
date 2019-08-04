@@ -58,7 +58,7 @@ test() {
     echo "Checking the success of establishing OE connection"
     oeSuccess=$(ipsec traffic | grep private)
     if [ -z "$oeSuccess" ]; then
-        echo "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks the ipsec traffic.)"
+        echo "Failed to establish an OE connection. try 'ipsec restart' and test again using 'ipsec letsencrypt -t'."
         exit
     else
         echo "OE Connection established successfully."
@@ -123,7 +123,7 @@ setup() {
         echo "Certificates NOT Found OR Saving the certificates in directory failed"
         exit
     else
-        echo "Intermediate Certificates downloaded in $DIR2."
+        echo "Intermediate Certificates downloaded in $DIR2"
     fi
 
     # Checking if nss database exists
@@ -194,7 +194,7 @@ setup() {
         echo "Checking the success of establishing OE connection"
         oeSuccess=$(ipsec traffic | grep private)
         if [ -z "$oeSuccess" ]; then
-            echo "Failed to establish an OE connection. (Ignore this message if you installed for server. As it checks for private connections in the ipsec traffic.)"
+            echo "Failed to establish an OE connection. try 'ipsec restart' and test again using 'ipsec letsencrypt -t'."
             exit
         else
             echo "OE Connection established successfully"
@@ -246,7 +246,7 @@ generate_certificate() {
         # Removing the file extension (.txt) from certificates
         name=${file%.txt}
         mv "$DIR"/"$file" "$DIR"/"$name"
-        echo "Certificate $DIR/$file renamed to $DIR/$name."
+        echo "Certificate $DIR/$file renamed to $DIR/$name"
     done
 
     # Now generating the #pkcs12 (.p12) file
@@ -316,7 +316,7 @@ update_certificate() {
             # Removing the file extension (.txt) from certificates
             name=${file%.txt}
             mv "$DIR"/"$file" "$DIR"/"$name"
-            echo "Certificate $DIR/$file renamed to $DIR/$name."
+            echo "Certificate $DIR/$file renamed to $DIR/$name"
         done
 
         # Now generating the #pkcs12 (.p12) file
@@ -342,10 +342,18 @@ help() {
     echo "Usage: ipsec letsencrypt [arguments]"
     echo "Available [arguments]"
     echo "setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h"
-    echo "setup, -s  :  For initial setup.  usage: ipsec letsencrypt setup OR ipsec letsencrypt -s"
-    echo "test, -t  -  For testing the configuration/connections.  usage: ipsec letsencrypt test OR ipsec letsencrypt -t"
-    echo "generatecertificate, -gc  -  For generating the certificate.  usage: ipsec letsencrypt generatecertificate OR ipsec letsencrypt -gc"
-    echo "updatecertificate, -uc  -  For updating the generated certificate (keeping the private key same).  usage: ipsec letsencrypt updatecertificate OR ipsec letsencrypt -uc"
+    echo
+    echo "setup, -s  :  For initial setup."
+    echo "usage: 'ipsec letsencrypt setup' OR 'ipsec letsencrypt -s'"
+    echo
+    echo "test, -t  -  For testing the configuration/connections."
+    echo "usage: 'ipsec letsencrypt test' OR 'ipsec letsencrypt -t'"
+    echo
+    echo "generatecertificate, -gc  -  For generating the certificate."
+    echo "usage: 'ipsec letsencrypt generatecertificate' OR 'ipsec letsencrypt -gc'"
+    echo
+    echo "updatecertificate, -uc  -  For updating the generated certificate (keeping the private key same)."
+    echo "usage: 'ipsec letsencrypt updatecertificate' OR 'ipsec letsencrypt -uc'"
 }
 
 case $1 in
@@ -371,6 +379,6 @@ case $1 in
     ;;
 *)
     echo "[argument] $1 not found"
-    echo "try: ipsec letsencrypt -h for help"
+    echo "try: 'ipsec letsencrypt -h' OR 'ipsec letsencrypt help' for help"
     ;;
 esac
