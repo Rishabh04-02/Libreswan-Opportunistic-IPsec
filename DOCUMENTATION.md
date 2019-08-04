@@ -225,13 +225,14 @@ For providing information regarding various {commands} and [arguments].
 
 Sample output -
 ```
-[root@linux]# ipsec letsencrypt -h
+[root@paola libreswan]# ipsec letsencrypt -h
 Usage: ipsec letsencrypt [arguments]
 Available [arguments]
-setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h
+setup --client, setup --server, test, generatecertificate, updatecertificate, help, -s --client, -s --server, -t, -gc, -uc, -h
 
-setup, -s  :  For initial setup.
-usage: 'ipsec letsencrypt setup' OR 'ipsec letsencrypt -s'
+setup --client, setup --server, -s --client, -s --server :  For initial server/client setup.
+usage: 'ipsec letsencrypt setup --client' OR 'ipsec letsencrypt -s --client' OR
+'ipsec letsencrypt setup --server' OR 'ipsec letsencrypt -s --server'
 
 test, -t  -  For testing the configuration/connections.
 usage: 'ipsec letsencrypt test' OR 'ipsec letsencrypt -t'
