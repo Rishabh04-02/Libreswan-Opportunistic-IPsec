@@ -5,7 +5,7 @@
 
 e.g. `ipsec letsencrypt -h` lists the available commands.
 
-It is a [program](https://github.com/Rishabh04-02/libreswan/tree/master/programs/letsencrypt) in [libreswan](https://github.com/libreswan/libreswan/), which integrates libreswan with Opportunistic Encryption utilities. The script provides various OE functionality e.g. initial OE setup, testing configuration/connection, generating and updating Let's Encrypt certificates. The details about the utilities and using them can be found in the [Documentation](https://github.com/Rishabh04-02/Libreswan-Opportunistic-IPsec/blob/master/DOCUMENTATION.md)
+It is a [program](https://github.com/Rishabh04-02/libreswan/tree/master/programs/letsencrypt) in [libreswan](https://github.com/libreswan/libreswan/), which integrates libreswan with Opportunistic Encryption utilities. The script provides various OE functionality e.g. initial OE setup, testing configuration/connection, generating and updating Let's Encrypt certificates. The details about the utilities and using them can be found in the [Documentation](https://github.com/Rishabh04-02/Libreswan-Opportunistic-IPsec/blob/master/DOCUMENTATION.md). Also, the documentation includes the sample output for each {command} and [argument].
 
 ## Issues
 To create/report an issue visit [Libreswan Issues](https://github.com/libreswan/libreswan/issues).

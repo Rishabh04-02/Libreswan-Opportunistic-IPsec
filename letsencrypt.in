@@ -264,11 +264,11 @@ generate_certificate() {
 
     # Now generating the certbot configuration for reusing key
     echo "Updating the letsencrypt configuration for reusing key."
-    read -p "Enter the config file name (e.g. /etc/letsencrypt/renewal/letsencrypt.libreswan.org.conf): " LetsEncryptConfFile
+    read -p "Enter the config file name with location (e.g. /etc/letsencrypt/renewal/letsencrypt.libreswan.org.conf): " LetsEncryptConfFile
     echo "reuse_key = True" >>"$LetsEncryptConfFile"
 
     # To confirm the success try running the test connection script on the client
-    echo "To confirm the success try running the test connection script on the client"
+    echo "To confirm the success try running 'ipsec letsencrypt -t' on the client"
 }
 
 # function for updating the issued certificates
@@ -333,7 +333,7 @@ update_certificate() {
         certutil -L -d sql:/etc/ipsec.d
 
         # To confirm the success try running the test connection script on the client
-        echo "To confirm the success try running the test connection script on the client"
+        echo "To confirm the success try running 'ipsec letsencrypt -t' on the client"
     fi
 }
 
@@ -341,10 +341,11 @@ update_certificate() {
 help() {
     echo "Usage: ipsec letsencrypt [arguments]"
     echo "Available [arguments]"
-    echo "setup, test, generatecertificate, updatecertificate, help, -s, -t, -gc, -uc, -h"
+    echo "setup --client, setup --server, test, generatecertificate, updatecertificate, help, -s --client, -s --server, -t, -gc, -uc, -h"
     echo
-    echo "setup, -s  :  For initial setup."
-    echo "usage: 'ipsec letsencrypt setup' OR 'ipsec letsencrypt -s'"
+    echo "setup --client, setup --server, -s --client, -s --server :  For initial server/client setup."
+    echo "usage: 'ipsec letsencrypt setup --client' OR 'ipsec letsencrypt -s --client' OR"
+    echo "'ipsec letsencrypt setup --server' OR 'ipsec letsencrypt -s --server'"
     echo
     echo "test, -t  -  For testing the configuration/connections."
     echo "usage: 'ipsec letsencrypt test' OR 'ipsec letsencrypt -t'"
