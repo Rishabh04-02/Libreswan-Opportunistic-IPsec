@@ -48,7 +48,7 @@ lists the available commands.</para>
 <para>To get a list of supported commands, use ipsec letsencrypt -h. A few of the
 commonly used commands are described below</para>
 
-<para><userinput>ipsec letsencrypt setup OR ipsec letsencrypt -s</userinput> For initial setup.</para>
+<para><userinput>ipsec letsencrypt -client OR ipsec letsencrypt -server</userinput> For initial setup.</para>
 
 <para><userinput>ipsec letsencrypt test OR ipsec letsencrypt -t</userinput> For testing the configuration/connections.</para>
 
