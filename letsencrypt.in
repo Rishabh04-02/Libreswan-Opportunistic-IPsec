@@ -192,7 +192,6 @@ generate_certificate() {
 # function for updating the issued certificates
 update_certificate() {
     # Updating the certificate using Certbot keeping the private key same
-    echo "Checking if Certbot is installed."
     certBotInstalled=$(command -v certbot)
     if [ -z "$certBotInstalled" ]; then
         echo "Certbot not installed."
@@ -209,9 +208,8 @@ update_certificate() {
     else
         # Generating #pkcs12 file, Downloading the required Intermediate certificate
         DIR=$(mktemp -d)
-        CERT="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 
-        wget_output=$(wget -q -P "$DIR" "$CERT")
+        wget_output=$(wget -q -P "$DIR" "$CERT4")
         if [ $? -ne 0 ]; then
             echo "Certificates NOT Found OR Saving the certificate in directory failed"
             exit
@@ -225,8 +223,11 @@ update_certificate() {
             mv "$DIR"/"$file" "$DIR"/"$name"
         done
 
+        # Getting the host name eg. letsencrypt.libreswan.org
+        read -p "Please enter the host name (e.g. letsencrypt.libreswan.org) : " HostName
+
         # Now generating the #pkcs12 (.p12) file
-        read -p "Enter the cert directory location (e.g. /etc/letsencrypt/live/letsencrypt.libreswan.org): " LetsEncryptCertDir
+        LetsEncryptCertDir=/etc/letsencrypt/live/"$HostName"
 
         openssl pkcs12 -export -inkey "$LetsEncryptCertDir"/privkey.pem -in "$LetsEncryptCertDir"/fullchain.pem -CAfile "$DIR"/"$name" -out "$LetsEncryptCertDir"/generatedCertificate.p12
 
