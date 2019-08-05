@@ -14,9 +14,6 @@
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 # for more details.
 
-FileName=$(basename $0)
-ServerClient=$1
-
 # CA certificates URL
 CERT1="https://letsencrypt.org/certs/isrgrootx1.pem.txt"
 CERT2="https://letsencrypt.org/certs/trustid-x3-root.pem.txt"
@@ -27,6 +24,9 @@ CERT4="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 
 # ipdir variable for getting location to save the configuration files
 ipdir="@IPSEC_NSSDIR@"
+
+# Installing for -server or -client
+ServerClient=$1
 
 # function for checking if the command is run as root
 check_root() {
