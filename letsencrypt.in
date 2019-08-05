@@ -151,9 +151,8 @@ generate_certificate() {
 
     # Preparing the certificate for importing in the nss database, Generating #pkcs12 file, Downloading the required Intermediate certificate
     DIR=$(mktemp -d)
-    CERT="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 
-    wget_output=$(wget -q -P "$DIR" "$CERT")
+    wget_output=$(wget -q -P "$DIR" "$CERT4")
     if [ $? -ne 0 ]; then
         echo "Certificates NOT Found OR Saving the certificate in directory failed"
         exit
@@ -167,8 +166,11 @@ generate_certificate() {
         mv "$DIR"/"$file" "$DIR"/"$name"
     done
 
+    # Getting the host name eg. letsencrypt.libreswan.org
+    read -p "Please enter the host name (e.g. letsencrypt.libreswan.org) : " HostName
+
     # Now generating the #pkcs12 (.p12) file
-    read -p "Enter the cert directory location (e.g. /etc/letsencrypt/live/letsencrypt.libreswan.org): " LetsEncryptCertDir
+    LetsEncryptCertDir=/etc/letsencrypt/live/"$HostName"
 
     openssl pkcs12 -export -inkey "$LetsEncryptCertDir"/privkey.pem -in "$LetsEncryptCertDir"/fullchain.pem -CAfile "$DIR"/"$name" -out "$LetsEncryptCertDir"/generatedCertificate.p12
 
@@ -180,7 +182,7 @@ generate_certificate() {
     certutil -L -d sql:/etc/ipsec.d
 
     # Now generating the certbot configuration for reusing key
-    read -p "Enter the config file name with location (e.g. /etc/letsencrypt/renewal/letsencrypt.libreswan.org.conf): " LetsEncryptConfFile
+    LetsEncryptConfFile=/etc/letsencrypt/renewal/"$HostName".conf
     echo "reuse_key = True" >>"$LetsEncryptConfFile"
 
     # To confirm the success try running the test connection script on the client
