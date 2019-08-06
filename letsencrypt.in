@@ -172,7 +172,7 @@ generate_certificate() {
     openssl pkcs12 -export -inkey "$LetsEncryptCertDir/privkey.pem" -in "$LetsEncryptCertDir/fullchain.pem" -CAfile "$DIR/$CERT4NAME" -out "$LetsEncryptCertDir/generatedCertificate.p12"
 
     # Importing the certificate in nss database
-    echo "Importing the certificate in database."
+    echo "Importing the certificate in database. Password for PKCS12 file is the same as the Export Password you entered above."
     pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir/generatedCertificate.p12"
 
     # restore umask
@@ -227,7 +227,7 @@ update_certificate() {
         openssl pkcs12 -export -inkey "$LetsEncryptCertDir/privkey.pem" -in "$LetsEncryptCertDir/fullchain.pem" -CAfile "$DIR/$CERT4NAME" -out "$LetsEncryptCertDir/generatedCertificate.p12"
 
         # Importing the certificate in nss database
-        echo "Importing the certificate in the database."
+        echo "Importing the certificate in database. Password for PKCS12 file is the same as the Export Password you entered above."
         pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir/generatedCertificate.p12"
 
         # restore umask
