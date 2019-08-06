@@ -140,14 +140,13 @@ setup() {
 # function for generating a certificates
 generate_certificate() {
     # Generating the certificate using Certbot
-    certBotInstalled=$(command -v certbot)
-    if [ -z "$certBotInstalled" ]; then
+    certBotInstalled=$(which certbot 2>/dev/null)
+    if [ -n "${certBotInstalled}" -a -x "${certBotInstalled}" ]; then
+        certbot certonly --webroot
+    else
         echo "Certbot not installed. Please install Certbot and try again."
         exit
     fi
-
-    # Generating the certificate using Certbot.
-    sudo certbot certonly --webroot
 
     # Preparing the certificate for importing in the nss database, Generating #pkcs12 file, Downloading the required Intermediate certificate
     DIR=$(mktemp -d)
