@@ -14,6 +14,9 @@
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 # for more details.
 
+# record original umask
+umask=$(umask)
+
 # CA certificates URL
 CERT1="https://letsencrypt.org/certs/isrgrootx1.pem.txt"
 CERT2="https://letsencrypt.org/certs/trustid-x3-root.pem.txt"
@@ -77,6 +80,10 @@ setup() {
 
     # Downloading the letsencrypt certificates
     echo "Downloading the letsencrypt certificates"
+
+    # set secure umask
+    umask 077
+
     DIR1=$(mktemp -d)
     DIR2=$(mktemp -d)
 
@@ -118,6 +125,9 @@ setup() {
         certutil -A -d sql:/etc/ipsec.d -n "$name" -i "$DIR2"/"$file" -t "u,u,u"
     done
 
+    # restore umask
+    umask ${umask}
+
     # Copying the required configuration
     if [ "$ServerClient" = "-server" ]; then
         configFile="@FINALDOCDIR@/examples/oe-letsencrypt-server.conf"
@@ -149,6 +159,9 @@ generate_certificate() {
     fi
 
     # Preparing the certificate for importing in the nss database, Generating #pkcs12 file, Downloading the required Intermediate certificate
+    # set secure umask
+    umask 077
+
     DIR=$(mktemp -d)
 
     wget_output=$(wget -q -P "$DIR" "$CERT4")
@@ -176,6 +189,9 @@ generate_certificate() {
     # Importing the certificate in nss database
     echo "Importing the certificate in database."
     pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir"/generatedCertificate.p12
+
+    # restore umask
+    umask ${umask}
 
     # Displaying the certificates installed in nss database
     certutil -L -d sql:/etc/ipsec.d
@@ -206,6 +222,9 @@ update_certificate() {
         exit
     else
         # Generating #pkcs12 file, Downloading the required Intermediate certificate
+        # set secure umask
+        umask 077
+
         DIR=$(mktemp -d)
 
         wget_output=$(wget -q -P "$DIR" "$CERT4")
@@ -233,6 +252,9 @@ update_certificate() {
         # Importing the certificate in nss database
         echo "Importing the certificate in the database."
         pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir"/generatedCertificate.p12
+
+        # restore umask
+        umask ${umask}
 
         # Displaying the certificates installed in nss database
         echo "Displaying the certificates installed in the database."
