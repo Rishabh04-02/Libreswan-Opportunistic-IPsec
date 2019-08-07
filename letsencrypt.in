@@ -26,9 +26,7 @@ CERT3="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt"
 CERT4="https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt"
 CERT4NAME="letsencryptauthorityx3.pem.txt"
 
-# ipdir variable for getting location to save the configuration files
-ipdir="@IPSEC_NSSDIR@"
-
+# @IPSEC_NSSDIR@ variable for getting location to save the configuration files
 # Installing for -server or -client
 ServerClient=$1
 
@@ -100,7 +98,7 @@ setup() {
     fi
 
     # Checking if nss database exists
-    dbFileCount=$(ls "$ipdir"/*.db 2>/dev/null | wc -l)
+    dbFileCount=$(ls "@IPSEC_NSSDIR@"/*.db 2>/dev/null | wc -l)
     if [ $dbFileCount -eq 0 ]; then
         # NSS database does not exist. Initializing the nss database
         ipsec initnss
@@ -110,13 +108,13 @@ setup() {
     echo "Importing the downloaded certificates into the database"
     for file in "$DIR1"/*; do
         file=${file##*/}
-        certutil -A -d sql:/etc/ipsec.d -n "${file%.pem.txt}" -i "$DIR1"/"$file" -t "CT,,"
+        certutil -A -d "sql:@IPSEC_NSSDIR@" -n "${file%.pem.txt}" -i "$DIR1"/"$file" -t "CT,,"
     done
 
     # Importing the Intermediate certificates in NSS database
     for file in "$DIR2"/*; do
         file=${file##*/}
-        certutil -A -d sql:/etc/ipsec.d -n "${file%.pem.txt}" -i "$DIR2"/"$file" -t "u,u,u"
+        certutil -A -d "sql:@IPSEC_NSSDIR@" -n "${file%.pem.txt}" -i "$DIR2"/"$file" -t "u,u,u"
     done
 
     # restore umask
@@ -132,12 +130,12 @@ setup() {
     fi
 
     echo "Saving the required configuration"
-    cp "$configFile" "$ipdir"
+    cp "$configFile" "@IPSEC_NSSDIR@"
 
-    # restoring the security context of $ipdir/$configFileName using restorecon.
+    # restoring the security context of @IPSEC_NSSDIR@/$configFileName using restorecon.
     checkRestorecon=$(which restorecon 2>/dev/null)
     if [ -n "${checkRestorecon}" -a -x "${checkRestorecon}" ]; then
-        restorecon "$ipdir"/"$configFileName"
+        restorecon "@IPSEC_NSSDIR@/$configFileName"
     fi
 }
 
@@ -173,13 +171,13 @@ generate_certificate() {
 
     # Importing the certificate in nss database
     echo "Importing the certificate in database. Password for PKCS12 file is the same as the Export Password you entered above."
-    pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir/generatedCertificate.p12"
+    pk12util -d "sql:@IPSEC_NSSDIR@" -i "$LetsEncryptCertDir/generatedCertificate.p12"
 
     # restore umask
     umask ${umask}
 
     # Displaying the certificates installed in nss database
-    certutil -L -d sql:/etc/ipsec.d
+    certutil -L -d "sql:@IPSEC_NSSDIR@"
 
     # Now generating the certbot configuration for reusing key
     LetsEncryptConfFile="/etc/letsencrypt/renewal/$HostName.conf"
@@ -228,14 +226,14 @@ update_certificate() {
 
         # Importing the certificate in nss database
         echo "Importing the certificate in database. Password for PKCS12 file is the same as the Export Password you entered above."
-        pk12util -d sql:/etc/ipsec.d -i "$LetsEncryptCertDir/generatedCertificate.p12"
+        pk12util -d "sql:@IPSEC_NSSDIR@" -i "$LetsEncryptCertDir/generatedCertificate.p12"
 
         # restore umask
         umask ${umask}
 
         # Displaying the certificates installed in nss database
         echo "Displaying the certificates installed in the database."
-        certutil -L -d sql:/etc/ipsec.d
+        certutil -L -d "sql:@IPSEC_NSSDIR@"
 
         # To confirm the success try running the test connection script on the client
         echo "To confirm the success try running 'ipsec letsencrypt -t' on the client"
@@ -288,3 +286,4 @@ case $1 in
     echo "try: 'ipsec letsencrypt -h' OR 'ipsec letsencrypt help' for help"
     ;;
 esac
+git clone
