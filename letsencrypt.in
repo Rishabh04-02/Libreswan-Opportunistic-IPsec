@@ -246,9 +246,9 @@ update_certificate() {
 help() {
     echo "Usage: ipsec letsencrypt [arguments]"
     echo "Available [arguments]"
-    echo "-client, -server, test, generatecertificate, updatecertificate, help, -t, -gc, -uc, -h"
+    echo "-server, -client, test, generatecertificate, updatecertificate, help, -t, -gc, -uc, -h"
     echo
-    echo "-client,-server :  For initial server/client setup."
+    echo "-server, -client :  For initial server/client setup."
     echo "usage: 'ipsec letsencrypt -client' OR 'ipsec letsencrypt -server'"
     echo
     echo "test, -t  -  For testing the configuration/connections."
