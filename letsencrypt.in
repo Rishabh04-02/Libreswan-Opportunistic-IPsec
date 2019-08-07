@@ -286,4 +286,3 @@ case $1 in
     echo "try: 'ipsec letsencrypt -h' OR 'ipsec letsencrypt help' for help"
     ;;
 esac
-git clone
