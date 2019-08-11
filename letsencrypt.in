@@ -181,15 +181,18 @@ generate_certificate() {
     LetsEncryptConfFile="/etc/letsencrypt/renewal/$HostName.conf"
     echo "reuse_key = True" >>"$LetsEncryptConfFile"
 
+    # creating a crontab fot automatic cert renewals
+    echo "0 1 * * * certbot renew --deploy-hook 'ipsec letsencrypt -ug $HostName'" >>cert-renewal
+    crontab cert-renewal
+    rm cert-renewal
+
     echo "try running 'ipsec restart' to load the latest certificates"
 
-    # To confirm the success try running the test connection script on the client
     echo "To confirm the success try running 'ipsec letsencrypt -t' on the client"
 }
 
 # function for updating the issued certificates
 update_certificate() {
-
     # Generating #pkcs12 file, Downloading the required Intermediate certificate
     # set secure umask
     umask 077
