@@ -127,7 +127,7 @@ letsencrypt.libreswan.org                                    u,u,u
 To confirm the success try running 'ipsec letsencrypt -t' on the client
 ```
 
-4. `ipsec letsencrypt updatecertificate` OR `ipsec letsencrypt -uc`
+4. `certbot renew --deploy-hook 'ipsec letsencrypt -ug hostname'`
 
 For updating the generated certificate (keeping the private key same). This [argument] is used to update the certificate keeping the private key same, and performs the following tasks:
 * Updating the certificate using Certbot keeping the private key same.
@@ -152,8 +152,6 @@ The following certs are not due for renewal yet:
   /etc/letsencrypt/live/letsencrypt.libreswan.org/fullchain.pem expires on 2019-11-03 (skipped)
 No renewals were attempted.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Did your certificate update? (yY/nN) y
-Please enter the host name (e.g. letsencrypt.libreswan.org) : letsencrypt.libreswan.org
 Enter Export Password:
 Verifying - Enter Export Password:
 Importing the certificate in the database.
@@ -192,6 +190,6 @@ usage: 'ipsec letsencrypt test' OR 'ipsec letsencrypt -t'
 generatecertificate, -gc  -  For generating the certificate.
 usage: 'ipsec letsencrypt generatecertificate' OR 'ipsec letsencrypt -gc'
 
-updatecertificate, -uc  -  For updating the generated certificate (keeping the private key same).
-usage: 'ipsec letsencrypt updatecertificate' OR 'ipsec letsencrypt -uc'
+For updating the generated certificate (keeping the private key same) use the following command.
+usage: 'usage: certbot renew --deploy-hook "ipsec letsencrypt -ug hostname"'
 ```

@@ -243,8 +243,8 @@ help() {
     echo "generatecertificate hostname, -gc hostname :  For generating the certificate."
     echo "usage: 'ipsec letsencrypt generatecertificate hostname' OR 'ipsec letsencrypt -gc hostname'"
     echo
-    echo "updatecertificate hostname, -uc hostname :  For updating the generated certificate (keeping the private key same)."
-    echo "usage: 'ipsec letsencrypt updatecertificate hostname' OR 'ipsec letsencrypt -uc hostname'"
+    echo "For updating the generated certificate (keeping the private key same) use the following command."
+    echo "usage: certbot renew --deploy-hook 'ipsec letsencrypt -ug hostname'"
 }
 
 case $1 in
