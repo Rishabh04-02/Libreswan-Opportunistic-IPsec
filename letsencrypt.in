@@ -240,6 +240,13 @@ manual_cert_renew() {
     fi
 }
 
+# function to disable ipsec by deleting the conf file in /etc/ipsec.d
+disable_ipsec() {
+    # Deleting the configuration files present in /etc/ipsec.d directory
+    rm -f /etc/ipsec.d/oe-letsencrypt-*.conf
+    echo "Please restart the IPsec service using 'ipsec restart' for changes to take effect."
+}
+
 # function for showing help
 help() {
     echo "Usage: ipsec letsencrypt [arguments]"
@@ -281,6 +288,10 @@ case $1 in
 "-renew")
     check_root
     manual_cert_renew
+    ;;
+"--disable")
+    check_root
+    disable_ipsec
     ;;
 "help" | "-h")
     help
