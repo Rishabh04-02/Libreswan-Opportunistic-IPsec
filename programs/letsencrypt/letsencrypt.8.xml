@@ -8,7 +8,7 @@
 </refentryinfo>
 <refmeta>
 <refentrytitle>IPSEC_LETSENCRYPT</refentrytitle>
-<manvolnum>1</manvolnum>
+<manvolnum>8</manvolnum>
 <refmiscinfo class='date'>3 August 2019</refmiscinfo>
 <refmiscinfo class="source">libreswan</refmiscinfo>
 <refmiscinfo class="manual">Executable programs</refmiscinfo>
@@ -51,7 +51,7 @@
 <para><emphasis remap='I'>Letsencrypt</emphasis>
 The command creates a secure Opportunistic Connection between the hosts commonly referred to as client and server.
 The client connects to the server and remains anonymous, whereas the server is authenticated before connecting to it.
-The server is not anonymous. The server uses Let's Encrypt certificates for authentication and encryption purposes.
+The server is not anonymous. The server uses Let's Encrypt certificates for authentication and encryption purposes.</para>
 
 <para>The
 <option>--client</option>
@@ -80,15 +80,13 @@ operation is used for disabling IPsec service.</para>
 <para>The
 <option>--help</option>
 operation is used for displaying all the available options.</para>
-
+</refsect1>
 <refsect1 id='see_also'><title>SEE ALSO</title>
 <para>
 <citerefentry><refentrytitle>ipsec.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>
 </para>
 </refsect1>
-
 <refsect1 id='history'><title>HISTORY</title>
 <para>Original Program written by &lt;<ulink url='https://github.com/Rishabh04-02/'>Rishabh</ulink>&gt; .</para>
 </refsect1>
-
 </refentry>
