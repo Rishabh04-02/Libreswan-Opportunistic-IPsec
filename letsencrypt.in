@@ -138,6 +138,8 @@ setup() {
     if [ -n "${checkRestorecon}" -a -x "${checkRestorecon}" ]; then
         restorecon "@IPSEC_NSSDIR@/$configFileName"
     fi
+
+    echo "To confirm the success try running 'ipsec letsencrypt --test' on the client"
 }
 
 # function for generating a certificates
@@ -275,7 +277,6 @@ case $1 in
 "--server" | "--client")
     check_root
     setup
-    test
     ;;
 "--generate-certificate")
     check_root
@@ -298,6 +299,6 @@ case $1 in
     ;;
 *)
     echo "[argument] $1 not found"
-    echo "try: 'ipsec letsencrypt -h' OR 'ipsec letsencrypt help' for help"
+    echo "try: 'ipsec letsencrypt --help' for help"
     ;;
 esac
