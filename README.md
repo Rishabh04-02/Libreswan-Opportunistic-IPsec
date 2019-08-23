@@ -26,6 +26,7 @@ Various functionalities of the project are listed below:
 * Saves the default client/server configuration.
 * Displays OE connection status to the user.
 * Displays the certificates installed in NSS database.
+* Disables ipsec and deletes configuration files saved in /etc/ipsec.d.
 * Provides details about various available utilities, {commands} and [arguments].
 
 ## Source code
