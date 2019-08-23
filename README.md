@@ -1,10 +1,12 @@
 # Libreswan-Opportunistic-IPsec
 
-Libreswan Opportunistic IPsec using LetsEncrypt is a project created during Google Summer of Code 2019. It adds a utility `letsencrypt` to the `ipsec`. letsencrypt invokes any of several utilities involved in controlling the Opportunistic Encryption system, running the specified {command} with the specified [argument] as if it had been invoked directly.
+Libreswan Opportunistic IPsec using LetsEncrypt is a project to create a program `letsencrypt` in `ipsec` which allows establishing the Opportunistic Encryption connections between two hosts. The `letsencrypt` program allows using various available utilities required to establish and control an Opportunistic connection. The letsencrypt program has several features, and can be used by running a specified {command} with a specified [argument].
 
-e.g. `ipsec letsencrypt --help` lists all the available commands.
+e.g. `ipsec letsencrypt --help` lists all the available commands and how to use them.
 
-It is a program in libreswan, which integrates libreswan with Opportunistic Encryption utilities. The script provides various OE functionality e.g. initial OE setup, testing configuration/connection, generating and updating Let's Encrypt certificates. The details about the utilities and using them can be found in the [Documentation: Libreswan Opportunistic IPsec using LetsEncrypt](https://libreswan.org/wiki/Documentation:_Libreswan_Opportunistic_IPsec_using_LetsEncrypt) . Also, the documentation includes the sample output for each {command} and [argument].
+The man page for the program is available at `man ipsec letsencrypt`. The program creates a secure Opportunistic Connection between the hosts commonly referred to as client and server. The client connects to the server and remains anonymous, whereas the server is authenticated before connecting to it, i.e., server is not anonymous. The server uses Let's Encrypt certificates for authentication and encryption purposes. Once the initial phase of authentication and handshaking completes, the secure connection establishes, and all the traffic (traffic can be through multiple applications) between the two hosts is now encrypted.
+
+The details about the utilities and using them can be found in the [Documentation: Libreswan Opportunistic IPsec using LetsEncrypt](https://libreswan.org/wiki/Documentation:_Libreswan_Opportunistic_IPsec_using_LetsEncrypt) . Also, the documentation includes the sample output for each {command} and [argument].
 
 Information regarding the development of the project is available at the [GSoC Project wiki](https://libreswan.org/wiki/Libreswan_Opportunistic_IPsec_using_LetsEncrypt)
 
